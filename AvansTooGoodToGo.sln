@@ -3,27 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal", "AvansTooGoodToGo\Portal.csproj", "{E27ACF91-3FAB-45D5-AE13-B22F877278B5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{441A2BE0-2C5D-4F7E-A4B0-646CBBE190A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{87B21441-1EC4-410D-A143-DF738EEA93B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{1665D177-1870-454D-A205-1F66F1F51ABD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{BC283E30-817A-4C69-BD9B-27CE848B77FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{BC283E30-817A-4C69-BD9B-27CE848B77FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DomainServices.Tests", "Core.DomainServices.Tests\Core.DomainServices.Tests.csproj", "{C55F00A0-C825-40FF-B6F6-5D8B6D34663D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.DomainServices.Tests", "Core.DomainServices.Tests\Core.DomainServices.Tests.csproj", "{C55F00A0-C825-40FF-B6F6-5D8B6D34663D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DomainServices", "Core.DomainServices\Core.DomainServices.csproj", "{A8468BF8-A13E-4C3D-9C9D-83E87FBC8F6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.DomainServices", "Core.DomainServices\Core.DomainServices.csproj", "{A8468BF8-A13E-4C3D-9C9D-83E87FBC8F6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain.Tests", "Core.Domain.Tests\Core.Domain.Tests.csproj", "{626F50E3-8108-4518-A1BB-F5DDE915B7D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain.Tests", "Core.Domain.Tests\Core.Domain.Tests.csproj", "{626F50E3-8108-4518-A1BB-F5DDE915B7D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Tests", "Portal.Tests\Portal.Tests.csproj", "{AAAD97CA-5815-4F6E-8440-433F7E93E121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Tests", "Portal.Tests\Portal.Tests.csproj", "{AAAD97CA-5815-4F6E-8440-433F7E93E121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8C8EBC3A-165D-40B4-BF6F-FDA9B2CB2601}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8C8EBC3A-165D-40B4-BF6F-FDA9B2CB2601}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.EF.Tests", "Infrastructure.EF.Tests\Infrastructure.EF.Tests.csproj", "{9F08072B-B679-4557-9D3F-1F2B5F7E5203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.EF.Tests", "Infrastructure.EF.Tests\Infrastructure.EF.Tests.csproj", "{9F08072B-B679-4557-9D3F-1F2B5F7E5203}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal", "Portal\Portal.csproj", "{759E933C-BCC6-4454-9E80-31C30A58421C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E27ACF91-3FAB-45D5-AE13-B22F877278B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E27ACF91-3FAB-45D5-AE13-B22F877278B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E27ACF91-3FAB-45D5-AE13-B22F877278B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E27ACF91-3FAB-45D5-AE13-B22F877278B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC283E30-817A-4C69-BD9B-27CE848B77FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC283E30-817A-4C69-BD9B-27CE848B77FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC283E30-817A-4C69-BD9B-27CE848B77FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,12 +59,15 @@ Global
 		{9F08072B-B679-4557-9D3F-1F2B5F7E5203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F08072B-B679-4557-9D3F-1F2B5F7E5203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F08072B-B679-4557-9D3F-1F2B5F7E5203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{759E933C-BCC6-4454-9E80-31C30A58421C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{759E933C-BCC6-4454-9E80-31C30A58421C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{759E933C-BCC6-4454-9E80-31C30A58421C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{759E933C-BCC6-4454-9E80-31C30A58421C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E27ACF91-3FAB-45D5-AE13-B22F877278B5} = {441A2BE0-2C5D-4F7E-A4B0-646CBBE190A7}
 		{BC283E30-817A-4C69-BD9B-27CE848B77FF} = {87B21441-1EC4-410D-A143-DF738EEA93B7}
 		{C55F00A0-C825-40FF-B6F6-5D8B6D34663D} = {87B21441-1EC4-410D-A143-DF738EEA93B7}
 		{A8468BF8-A13E-4C3D-9C9D-83E87FBC8F6A} = {87B21441-1EC4-410D-A143-DF738EEA93B7}
@@ -76,6 +75,7 @@ Global
 		{AAAD97CA-5815-4F6E-8440-433F7E93E121} = {441A2BE0-2C5D-4F7E-A4B0-646CBBE190A7}
 		{8C8EBC3A-165D-40B4-BF6F-FDA9B2CB2601} = {1665D177-1870-454D-A205-1F66F1F51ABD}
 		{9F08072B-B679-4557-9D3F-1F2B5F7E5203} = {1665D177-1870-454D-A205-1F66F1F51ABD}
+		{759E933C-BCC6-4454-9E80-31C30A58421C} = {441A2BE0-2C5D-4F7E-A4B0-646CBBE190A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCE2259D-3F6D-4E71-A089-46618E9E4B7E}

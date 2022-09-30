@@ -1,8 +1,8 @@
-﻿using AvansTooGoodToGo.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Portal.Models;
 using System.Diagnostics;
 
-namespace AvansTooGoodToGo.Controllers
+namespace Portal.Controllers
 {
     public class HomeController : Controller
     {

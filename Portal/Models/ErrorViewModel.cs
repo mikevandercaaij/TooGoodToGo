@@ -1,4 +1,4 @@
-namespace AvansTooGoodToGo.Models
+namespace Portal.Models
 {
     public class ErrorViewModel
     {
