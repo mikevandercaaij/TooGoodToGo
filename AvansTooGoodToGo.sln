@@ -21,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Tests", "Portal.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8C8EBC3A-165D-40B4-BF6F-FDA9B2CB2601}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.EF.Tests", "Infrastructure.EF.Tests\Infrastructure.EF.Tests.csproj", "{9F08072B-B679-4557-9D3F-1F2B5F7E5203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Tests", "Infrastructure.EF.Tests\Infrastructure.Tests.csproj", "{9F08072B-B679-4557-9D3F-1F2B5F7E5203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal", "Portal\Portal.csproj", "{759E933C-BCC6-4454-9E80-31C30A58421C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal", "Portal\Portal.csproj", "{759E933C-BCC6-4454-9E80-31C30A58421C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
