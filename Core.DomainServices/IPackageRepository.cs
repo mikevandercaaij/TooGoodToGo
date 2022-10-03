@@ -6,6 +6,6 @@
         Task<Package> GetPackageByIdAsync(int id);
         Task AddPackageAsync(Package package);
         Task UpdatePackageAsync(Package package);
-        Task DeletePackageAsync(Package package);
+        Task DeletePackageAsync(int id);
     }
 }
