@@ -18,7 +18,7 @@
         public DateTime? PickUpTime { get; set; }
 
         [Required(ErrorMessage = "Geef aan tot wanneer het pakket opgehaald mag worden!")]
-        public TimeOnly? LatestPickUpTime { get; set; }
+        public DateTime? LatestPickUpTime { get; set; }
 
         [Required(ErrorMessage = "Geef aan of het pakket voor volwassenen is bedoeld!")]
         public bool? IsAdult { get; set; }
