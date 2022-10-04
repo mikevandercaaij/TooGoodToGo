@@ -1,25 +1,15 @@
 ﻿using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace Core.Domain.Enums
 {
-    public enum MealtypeEnum
+    public enum CityEnum
     {
-        [Description("Ontbijt")]
-        Breakfast,
+        Breda,
+        
+        [Display(Name = "Den Bosch")]
+        DenBosch,
 
-        [Description("Lunch")]
-        Lunch,
-
-        [Description("Avondmaaltijd")]
-        Dinner,
-
-        [Description("Warme avondmaaltijd")]
-        WarmDinner,
-
-        [Description("Brood")]
-        Bread,
-
-        [Description("Drank")]
-        Beverage
+        Tilburg
     }
 }
