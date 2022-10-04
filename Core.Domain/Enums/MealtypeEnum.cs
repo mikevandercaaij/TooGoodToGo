@@ -2,15 +2,25 @@
 
 namespace Core.Domain.Enums
 {
-    public enum CityEnum
+    public enum MealtypeEnum
     {
-        [Description("Breda")]
-        Breda,
+        [Description("Ontbijt")]
 
-        [Description("Den Bosch")]
-        DenBosch,
+        Breakfast,
 
-        [Description("Tilburg")]
-        Tilburg
+        [Description("Lunch")]
+        Lunch,
+
+        [Description("Avondmaaltijd")]
+        Dinner,
+
+        [Description("Warme avondmaaltijd")]
+        WarmDinner,
+
+        [Description("Brood")]
+        Bread,
+
+        [Description("Drank")]
+        Beverage
     }
 }
