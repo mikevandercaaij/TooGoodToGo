@@ -1,10 +1,10 @@
-﻿namespace Core.Domain.Entities
-{
-    public class Student
-    {
-        [Key]
-        public int StudentId { get; set; }
+﻿using Core.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
+namespace Portal.Models
+{
+    public class StudentRegisterModel
+    {
         [Required(ErrorMessage = "Vul je voornaam in")]
         public string? FirstName { get; set; }
 
@@ -23,10 +23,12 @@
 
         [Required(ErrorMessage = "Geef aan in welke stad je studeert!")]
         public CityEnum? StudyCity { get; set; }
-        
+
         [Required(ErrorMessage = "Vul je telefoonnummer in!")]
         [Phone]
-        public string? PhoneNumber { get; set; }         
-        
+        public string? PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Vul je wachtwoord in!")]
+        public string? Password { get; set; }
     }
 }

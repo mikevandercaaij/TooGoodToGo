@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,32 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 var userConnectionString = builder.Configuration.GetConnectionString("SecurityDatabaseTGTG");
 builder.Services.AddDbContext<SecurityDbContext>(options => options.UseSqlServer(userConnectionString));
+
+//TODO: Add password validation later instead of the following password requirements
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
+    options.SignIn.RequireConfirmedEmail = false;
+    options.Password.RequiredLength = 0;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<SecurityDbContext>().AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication("CookieAuth")
+    .AddCookie("CookieAuth", config =>
+    {
+        config.Cookie.Name = "AuthorizationCookieTGTG";
+        config.LoginPath = "/Account/Login";
+    });
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddAuthorization(config =>
+{
+    config.AddPolicy("HasStudentRole", policy => policy.RequireClaim("Student"));
+    config.AddPolicy("HasCanteenEmployeeRole", policy => policy.RequireClaim("CanteenEmployee"));
+});
 
 builder.Services.AddControllersWithViews();
 
@@ -23,6 +50,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
