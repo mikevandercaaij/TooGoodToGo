@@ -3,29 +3,65 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Portal</title>
+    <title>Too Good To Go | @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Portal.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Portal</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="#">
+                    <img src="/img/tgtg-logo.png" class="--nav-logo"/>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @if (ViewBag.Role != "Student" && ViewBag.Role != "CanteenEmployee")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="">Aanbod</a>
+                            </li>
+                        }
+
+                        @if (ViewBag.Role == "Student")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-action="">Aanbod</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-action="">Mijn Reserveringen</a></li>
+                        }
+
+                        @if (ViewBag.Role == "CanteenEmployee")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Pakketten
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-action="">Aanbod</a></li>
+                                    <li><a class="dropdown-item" asp-action="">Pakket aanmaken</a></li>
+                                    <li><a class="dropdown-item" asp-action="">Onze pakketten</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item"><a class="nav-link" asp-action="">Reserveringen</a></li>
+                        }
+
                     </ul>
+                    @if (ViewBag.Role != "Student" && ViewBag.Role != "CanteenEmployee")
+                    {
+                        <a class="nav-link" asp-action="Login" asp-controller="Account">Inloggen</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-action="Logout" asp-controller="Account">Uitloggen</a>
+                    }
                 </div>
             </div>
         </nav>
@@ -36,10 +72,10 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - Portal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="border-top footer text-muted --footer-holder">
+        <img class="--footer-main-img" src="/img/tgtg-logo.png" />
+        <p class="--footer-text">© 2022 - Avans</p>
+        <img class="--footer-img" src="/img/avans-logo.png" />
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

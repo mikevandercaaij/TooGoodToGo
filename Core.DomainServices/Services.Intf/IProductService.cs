@@ -1,9 +1,8 @@
-﻿namespace Core.DomainServices
+﻿namespace Core.DomainServices.Services.Intf
 {
-    public interface IProductRepository
+    public interface IProductService
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
-
     }
 }

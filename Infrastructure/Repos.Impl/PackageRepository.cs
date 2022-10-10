@@ -1,4 +1,5 @@
-﻿using Infrastructure.Contexts;
+﻿using Core.DomainServices.Repos.Intf;
+using Infrastructure.Contexts;
 
 namespace Infrastructure.Repos.Impl
 {
@@ -10,7 +11,7 @@ namespace Infrastructure.Repos.Impl
         {
             _context = context;
         }
-        public async Task<Package> GetPackageByIdAsync(int id) => await _context.Packages.FindAsync(id);
+        public async Task<Package?> GetPackageByIdAsync(int id) => await _context.Packages.FindAsync(id);
 
         public async Task<IEnumerable<Package>> GetAllPackagesAsync() => await _context.Packages.ToListAsync();
         public async Task AddPackageAsync(Package package)

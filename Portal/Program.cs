@@ -1,7 +1,13 @@
+using Core.DomainServices.Repos.Intf;
+using Core.DomainServices.Services.Impl;
+using Core.DomainServices.Services.Intf;
+using Infrastructure.Repos.Impl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDatabaseTGTG");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
@@ -31,9 +37,21 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddAuthorization(config =>
 {
-    config.AddPolicy("HasStudentRole", policy => policy.RequireClaim("Student"));
-    config.AddPolicy("HasCanteenEmployeeRole", policy => policy.RequireClaim("CanteenEmployee"));
+    config.AddPolicy("Student", policy => policy.RequireClaim("Role", "Student"));
+    config.AddPolicy("CanteenEmployee", policy => policy.RequireClaim("Role", "CanteenEmployee"));
 });
+
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ICanteenRepository, CanteenRepository>();
+builder.Services.AddScoped<ICanteenEmployeeRepository, CanteenEmployeeRepository>();
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICanteenService, CanteenService>();
+builder.Services.AddScoped<ICanteenEmployeeService, CanteenEmployeeService>();
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddControllersWithViews();
 

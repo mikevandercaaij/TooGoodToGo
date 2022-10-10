@@ -1,9 +1,9 @@
-﻿namespace Core.DomainServices
+﻿namespace Core.DomainServices.Repos.Intf
 {
     public interface IStudentRepository
 
     {
         Task<Student> GetStudentByIdAsync(int id);
-        Task AddStudent(Student student);
+        Task AddStudentAsync(Student student);
     }
 }
