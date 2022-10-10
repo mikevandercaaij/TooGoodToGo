@@ -1,4 +1,5 @@
-﻿using Infrastructure.Contexts;
+﻿using Core.DomainServices.Repos.Intf;
+using Infrastructure.Contexts;
 
 namespace Infrastructure.Repos.Impl
 {

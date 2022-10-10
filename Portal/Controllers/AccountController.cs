@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.DomainServices.Services.Impl;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Portal.Models;
+using Core.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
+using Core.DomainServices.Services.Intf;
 
 namespace Portal.Controllers
 {
@@ -10,11 +13,15 @@ namespace Portal.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ICanteenEmployeeService _canteenEmployeeService;
+        private readonly IStudentService _studentService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ICanteenEmployeeService canteenEmployeeService, IStudentService studentService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _canteenEmployeeService = canteenEmployeeService;
+            _studentService = studentService;
         }
 
         [HttpGet]
@@ -42,7 +49,14 @@ namespace Portal.Controllers
                     if ((await _signInManager.PasswordSignInAsync(user, LoginModel.Password, false, false)).Succeeded)
                     {
                         return Redirect(LoginModel?.ReturnUrl ?? "/");
+                    } else
+                    {
+                        ModelState.AddModelError(nameof(LoginModel.Password), "Het ingevulde wachtwoord is incorrect!");
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(LoginModel.Password), "Er bestaat geen gebruiker met deze gegevens!");
                 }
             }
             return View(LoginModel);
@@ -74,8 +88,21 @@ namespace Portal.Controllers
                 EmailConfirmed = true
             };
 
+            var Student = new Student()
+            {
+                FirstName = studentModel.FirstName,
+                LastName = studentModel.LastName,
+                StudentNumber = studentModel.StudentNumber,
+                EmailAddress = studentModel.EmailAddress,
+                PhoneNumber = studentModel.PhoneNumber,
+                DateOfBirth = studentModel.DateOfBirth,
+                StudyCity = studentModel.StudyCity
+            };
+
+            await _studentService.AddStudentAsync(Student);
+
             var result = await _userManager.CreateAsync(user, studentModel.Password);
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Student", "Student"));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", "Student"));
 
             if (result.Succeeded)
             {
@@ -107,8 +134,18 @@ namespace Portal.Controllers
                 EmailConfirmed = true
             };
 
+            var CanteenEmployee = new CanteenEmployee()
+            {
+                FirstName = canteenEmployeeModel.FirstName,
+                LastName = canteenEmployeeModel.LastName,
+                EmployeeId = canteenEmployeeModel.EmployeeId,
+                Location = canteenEmployeeModel.Location
+            };
+
+            await _canteenEmployeeService.AddCanteenEmployeeAsync(CanteenEmployee);
+            
             var result = await _userManager.CreateAsync(user, canteenEmployeeModel.Password);
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CanteenEmployee", "CanteenEmployee"));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", "CanteenEmployee"));
 
             if (result.Succeeded)
             {

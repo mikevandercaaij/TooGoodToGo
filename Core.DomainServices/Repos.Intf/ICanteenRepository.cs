@@ -1,4 +1,4 @@
-﻿namespace Core.DomainServices
+﻿namespace Core.DomainServices.Repos.Intf
 {
     public interface ICanteenRepository
     {
