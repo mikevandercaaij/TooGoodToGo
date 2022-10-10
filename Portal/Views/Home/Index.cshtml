@@ -2,14 +2,23 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">
-            @if(ViewBag.Role == "Student") {
-
-            } else if(ViewBag.Role == "CanteenEmployee") {
-
-            } else {
-
-            }
-    </h1>
-</div>
+@if (ViewBag.Role == "Student")
+{
+    @ViewBag.Role
+}
+else if (ViewBag.Role == "CanteenEmployee")
+{
+    @ViewBag.Role
+}
+else
+{
+    <section class="text-center">
+        <h1 class="--header-main --home-hero-section">Welkom op Avans Too Good To Go</h1>
+        <h2 class="--header-sub-main">Maak snel een account aan!</h2>
+        <div class="--home-btn-holder">
+            <a class="--main-btn" asp-action="RegisterStudent" asp-controller="Account">Student</a>
+            <a class="--main-btn" asp-action="RegisterCanteenEmployee" asp-controller="Account">Kantinemedewerker</a>
+        </div>
+        <p>Heb je al een account? Klik <a class="--text-link" asp-action="Login" asp-controller="Account">hier</a> om in te loggen</p>
+    </section>
+}

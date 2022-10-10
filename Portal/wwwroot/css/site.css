@@ -16,3 +16,111 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Custom style */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+:root {
+    --primary-color: #1C3879;
+    --secondary-color: #607EAA;
+    --beige: #F9F5EB;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--beige);
+}
+
+/* Home */
+
+.--home-hero-section {
+    margin-top:175px;
+}
+
+.--header-main {
+    font-size: 58px;
+    font-weight:bold;
+    color: var(--primary-color)
+}
+
+.--header-sub-main {
+    font-size: 42px;
+    color: var(--primary-color)
+}
+
+.--home-btn-holder {
+    display:flex; 
+    justify-content:center;
+}
+
+.--main-btn {
+    margin:15px;
+    color: var(--primary-color);
+    padding:10px;
+    font-size:18px;
+    border: 2px solid var(--primary-color);
+    text-decoration:none;
+    min-width: 175px;
+    transition: 0.3s;
+}
+
+.--main-btn:hover {
+    color: var(--beige);
+    background-color: var(--primary-color);
+}
+
+.--text-link {
+    color: var(--primary-color);
+}
+
+.--text-link:hover {
+    color: var(--secondary-color);
+    cursor:pointer;
+}
+
+/* Navbar */
+nav {
+    height:80px;
+    background-color: var(--primary-color);
+}
+
+.--nav-logo {
+    height:100%;
+    width:110px;
+}
+
+.nav-link{
+    color: var(--beige) !important;
+    font-size:18px;
+    margin:10px;
+}
+
+/* Footer */
+
+footer {
+    background-color: var(--primary-color);
+    height:80px;
+}
+
+.--footer-holder {
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.--footer-text {
+    font-size:18px;
+    color: var(--beige);
+    margin: 0 !important;
+}
+
+.--footer-main-img {
+    height: 100%;
+    width: 110px;
+}
+
+.--footer-img {
+    height:100%;
+    width:125px;    
+}
