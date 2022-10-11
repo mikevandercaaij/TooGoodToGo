@@ -6,7 +6,7 @@ namespace Core.Domain.Enums
     {
         [Description("Ontbijt")]
 
-        Breakfast,
+        Breakfast = 1,
 
         [Description("Lunch")]
         Lunch,

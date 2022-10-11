@@ -5,7 +5,7 @@ namespace Core.Domain.Enums
 {
     public enum CityEnum
     {
-        Breda,
+        Breda = 1,
         
         [Display(Name = "Den Bosch")]
         DenBosch,

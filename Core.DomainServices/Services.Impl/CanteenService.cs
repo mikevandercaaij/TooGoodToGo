@@ -4,14 +4,15 @@ namespace Core.DomainServices.Services.Impl
 {
     public class CanteenService : ICanteenService
     {
-        public Task<IEnumerable<Canteen>> GetAllCanteensAsync()
+
+        private readonly ICanteenRepository _canteenRepository;
+
+        public CanteenService(ICanteenRepository canteenRepository)
         {
-            throw new NotImplementedException();
+            _canteenRepository = canteenRepository;
         }
 
-        public Task<Canteen> GetCanteenByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<Canteen>> GetAllCanteensAsync() => _canteenRepository.GetAllCanteensAsync();
+        public Task<Canteen?> GetCanteenByIdAsync(int id) => _canteenRepository.GetCanteenByIdAsync(id);
     }
 }

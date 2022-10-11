@@ -9,12 +9,12 @@ namespace Core.DomainServices.Services.Impl
         {
             _canteenEmployeeRepository = canteenEmployeeRepository;
         }
-
+        
         public async Task AddCanteenEmployeeAsync(CanteenEmployee canteenEmployee)
         {
             await _canteenEmployeeRepository.AddCanteenEmployeeAsync(canteenEmployee);
         }
 
-        public async Task<CanteenEmployee> GetCanteenEmployeeByIdAsync(int id) => await _canteenEmployeeRepository.GetCanteenEmployeeByIdAsync(id);
+        public async Task<CanteenEmployee?> GetCanteenEmployeeByIdAsync(string id) => await _canteenEmployeeRepository.GetCanteenEmployeeByIdAsync(id);
     }
 }

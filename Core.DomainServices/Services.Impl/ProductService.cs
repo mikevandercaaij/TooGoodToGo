@@ -11,7 +11,6 @@
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync() => await _productRepository.GetAllProductsAsync();
 
-        public async Task<Product> GetProductByIdAsync(int id) => await _productRepository.GetProductByIdAsync(id);
+        public async Task<Product?> GetProductByIdAsync(int id) => await _productRepository.GetProductByIdAsync(id);
     }
-
 }

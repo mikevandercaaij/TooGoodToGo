@@ -79,12 +79,18 @@ namespace Portal.Controllers
         {
             if(!ModelState.IsValid)
             {
+                if (ModelState["StudyCity"]?.Errors.Count > 0)
+                {
+                    ModelState["StudyCity"]?.Errors.Clear();
+                    ModelState["StudyCity"]?.Errors.Add("Selecteer een studiestad!");
+                }
+
                 return View(studentModel);
             }
 
             var user = new IdentityUser
             {
-                UserName = studentModel.StudentNumber.ToString(),
+                UserName = studentModel.StudentNumber!.ToString(),
                 EmailConfirmed = true
             };
 
@@ -99,17 +105,20 @@ namespace Portal.Controllers
                 StudyCity = studentModel.StudyCity
             };
 
-            await _studentService.AddStudentAsync(Student);
-
             var result = await _userManager.CreateAsync(user, studentModel.Password);
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", "Student"));
 
             if (result.Succeeded)
             {
+                await _studentService.AddStudentAsync(Student);
+                await _signInManager.PasswordSignInAsync(user, studentModel.Password, false, false);
                 return RedirectToAction("Index", "Home");
             }
-            
-            return View();
+            else
+            {
+                ModelState["StudentNumber"]?.Errors.Add("Er bestaat al een account met dit studentennummer!");
+                return View(studentModel);
+            }
         }
 
         public IActionResult RegisterCanteenEmployee()
@@ -125,12 +134,19 @@ namespace Portal.Controllers
         {
             if (!ModelState.IsValid)
             {
+
+                if (ModelState["Location"]?.Errors.Count > 0)
+                {
+                    ModelState["Location"]?.Errors.Clear();
+                    ModelState["Location"]?.Errors.Add("Selecteer een locatie!");
+                }
+
                 return View(canteenEmployeeModel);
             }
 
             var user = new IdentityUser
             {
-                UserName = canteenEmployeeModel.EmployeeId.ToString(),
+                UserName = canteenEmployeeModel.EmployeeId!.ToString(),
                 EmailConfirmed = true
             };
 
@@ -142,18 +158,20 @@ namespace Portal.Controllers
                 Location = canteenEmployeeModel.Location
             };
 
-            await _canteenEmployeeService.AddCanteenEmployeeAsync(CanteenEmployee);
-            
             var result = await _userManager.CreateAsync(user, canteenEmployeeModel.Password);
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", "CanteenEmployee"));
 
             if (result.Succeeded)
             {
+                await _canteenEmployeeService.AddCanteenEmployeeAsync(CanteenEmployee);
+                await _signInManager.PasswordSignInAsync(user, canteenEmployeeModel.Password, false, false);
                 return RedirectToAction("Index", "Home");
+            } 
+            else
+            {
+                ModelState["EmployeeId"]?.Errors.Add("Er bestaat al een account met dit personeelsnummer!");
+                return View(canteenEmployeeModel);
             }
-
-            return View();
         }
-
     }
 }

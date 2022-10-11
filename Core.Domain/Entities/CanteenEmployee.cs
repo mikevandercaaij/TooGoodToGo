@@ -12,9 +12,9 @@
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Vul je personeelsnummer in!")]
-        public int? EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
 
         [Required(ErrorMessage = "Vul een locatie in!")]
-        public string? Location { get; set; }
+        public CanteenLocationEnum? Location { get; set; }
     }
 }

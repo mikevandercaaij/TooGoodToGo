@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Models
 {
@@ -11,10 +12,10 @@ namespace Portal.Models
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Vul je personeelsnummer in!")]
-        public int? EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
 
         [Required(ErrorMessage = "Vul een locatie in!")]
-        public string? Location { get; set; }
+        public CanteenLocationEnum? Location { get; set; }
 
         [Required(ErrorMessage = "Vul je wachtwoord in!")]
         public string? Password { get; set; }
