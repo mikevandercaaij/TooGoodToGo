@@ -95,6 +95,10 @@ nav {
     margin:10px;
 }
 
+.active {
+    border-bottom: 1px solid var(--beige);
+}
+
 /* Footer */
 
 footer {

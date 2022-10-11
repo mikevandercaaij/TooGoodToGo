@@ -26,7 +26,9 @@
         
         [Required(ErrorMessage = "Vul je telefoonnummer in!")]
         [Phone]
-        public string? PhoneNumber { get; set; }         
+        public string? PhoneNumber { get; set; }      
+        
+        //TODO: Add list of packages
         
     }
 }
