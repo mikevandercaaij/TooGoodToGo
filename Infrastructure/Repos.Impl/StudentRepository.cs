@@ -11,7 +11,7 @@ namespace Infrastructure.Repos.Impl
         {
             _context = context;
         }
-        public async Task<Student> GetStudentByIdAsync(int id) => await _context.Students.FindAsync(id);
+        public async Task<Student?> GetStudentByIdAsync(string id) => await _context.Students.FindAsync(id);
         public async Task AddStudentAsync(Student student)
         {
             await _context.Students.AddAsync(student);

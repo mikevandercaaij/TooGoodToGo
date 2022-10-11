@@ -15,7 +15,7 @@
         public DateTime? DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Vul je studentennummer in!")]
-        public int? StudentNumber { get; set; }
+        public string? StudentNumber { get; set; }
 
         [Required(ErrorMessage = "Vul je email in!")]
         [EmailAddress]

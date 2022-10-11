@@ -1,4 +1,6 @@
-﻿namespace Core.DomainServices.Services.Intf
+﻿using Core.Domain.Enums;
+
+namespace Core.DomainServices.Services.Intf
 {
     public interface IPackageService
     {
@@ -7,7 +9,7 @@
         Task AddPackageAsync(Package package);
         Task UpdatePackageAsync(Package package);
         Task DeletePackageAsync(int id);
-        Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(string location);
+        Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(CanteenLocationEnum location);
 
     }
 }

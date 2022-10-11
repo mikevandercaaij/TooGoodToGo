@@ -10,7 +10,7 @@ namespace Infrastructure.Repos.Impl
         {
             _context = context;
         }
-        public async Task<Canteen> GetCanteenByIdAsync(int id) => await _context.Canteens.FindAsync(id);
+        public async Task<Canteen?> GetCanteenByIdAsync(int id) => await _context.Canteens.FindAsync(id);
         public async Task<IEnumerable<Canteen>> GetAllCanteensAsync() => await _context.Canteens.ToListAsync();
     }
 }

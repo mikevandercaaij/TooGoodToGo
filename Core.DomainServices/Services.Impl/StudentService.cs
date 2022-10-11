@@ -14,7 +14,7 @@
             await _studentRepository.AddStudentAsync(student);
         }
 
-        public async Task<Student> GetStudentByIdAsync(int id) => await _studentRepository.GetStudentByIdAsync(id);
+        public async Task<Student?> GetStudentByIdAsync(string id) => await _studentRepository.GetStudentByIdAsync(id);
 
     }
 }

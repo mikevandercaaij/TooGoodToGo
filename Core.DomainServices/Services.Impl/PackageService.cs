@@ -1,4 +1,6 @@
-﻿namespace Core.DomainServices.Services.Impl
+﻿using Core.Domain.Enums;
+
+namespace Core.DomainServices.Services.Impl
 {
     public class PackageService : IPackageService
     {
@@ -21,7 +23,7 @@
 
         public async Task<IEnumerable<Package>> GetAllPackagesAsync() => await _packageRepository.GetAllPackagesAsync();
 
-        public async Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(string location)
+        public async Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(CanteenLocationEnum location)
         {
             var allPackages = await _packageRepository.GetAllPackagesAsync();
             return allPackages.Where(p => p.Canteen?.Location == location);
