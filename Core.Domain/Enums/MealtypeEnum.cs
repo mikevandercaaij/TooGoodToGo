@@ -4,23 +4,25 @@ namespace Core.Domain.Enums
 {
     public enum MealtypeEnum
     {
-        [Description("Ontbijt")]
+
+        [Display(Name = "Ontbijt")]
 
         Breakfast = 1,
 
-        [Description("Lunch")]
+        [Display(Name = "Lunch")]
         Lunch,
 
-        [Description("Avondmaaltijd")]
+        [Display(Name = "Avondmaaltijd")]
         Dinner,
 
-        [Description("Warme avondmaaltijd")]
+        [Display(Name = "Warme avondmaaltijd")]
+
         WarmDinner,
 
-        [Description("Brood")]
+        [Display(Name = "Brood")]
         Bread,
 
-        [Description("Drank")]
+        [Display(Name = "Drank")]
         Beverage
     }
 }

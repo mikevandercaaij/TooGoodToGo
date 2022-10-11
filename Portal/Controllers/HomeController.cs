@@ -10,13 +10,8 @@ namespace Portal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-        
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var role = this.User.GetRole();

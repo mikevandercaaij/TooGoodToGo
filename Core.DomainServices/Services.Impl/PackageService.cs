@@ -5,14 +5,45 @@ namespace Core.DomainServices.Services.Impl
     public class PackageService : IPackageService
     {
         private readonly IPackageRepository _packageRepository;
+        private readonly ICanteenRepository _canteenRepository;
+        private readonly ICanteenEmployeeRepository _canteenEmployeeRepository;
+        private readonly IProductRepository _productRepository;
 
-        public PackageService(IPackageRepository packageRepository)
+        public PackageService(IPackageRepository packageRepository, ICanteenEmployeeRepository canteenEmployeeRepository, ICanteenRepository canteenRepository , IProductRepository productRepository)
         {
             _packageRepository = packageRepository;
+            _canteenEmployeeRepository = canteenEmployeeRepository;
+            _canteenRepository = canteenRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task AddPackageAsync(Package package)
+        public async Task AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
         {
+            var user = await _canteenEmployeeRepository.GetCanteenEmployeeByIdAsync(userId);
+            
+            var canteen = await _canteenRepository.GetCanteenByLocationAsync((CanteenLocationEnum)user!.Location!);
+
+            package.Canteen = canteen;
+
+            bool containsAlcohol = false;
+
+            foreach (string productName in selectedProducts)
+            {
+                var product = await _productRepository.GetProductByNameAsync(productName);
+                if(product!.ContainsAlcohol)
+                {
+                    containsAlcohol = true;
+                }
+                package.Products.Add(product!);
+            }
+
+            package.IsAdult = containsAlcohol;
+
+            foreach (var product in package.Products)
+            {
+                product.Packages.Add(package);
+            }
+
             await _packageRepository.AddPackageAsync(package);
         }
         

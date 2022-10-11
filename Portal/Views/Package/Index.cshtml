@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Package>
+@{
+    ViewData["Title"] = "Aanbod";
+    ViewBag.CurrentPage = "Aanbod";
+
+}
+
+
+@foreach (Package p in Model) {
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@p.Name</h5>
+            <p class="card-text">Ophaaldatum en tijd: @p.PickUpTime</p>
+            <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
+            <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
+            <a href="#" class="btn btn-primary">Bekijk</a>
+        </div>
+    </div>
+}

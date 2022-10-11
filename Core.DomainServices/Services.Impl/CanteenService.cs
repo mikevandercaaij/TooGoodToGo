@@ -1,4 +1,5 @@
-﻿using Core.DomainServices.Services.Intf;
+﻿using Core.Domain.Enums;
+using Core.DomainServices.Services.Intf;
 
 namespace Core.DomainServices.Services.Impl
 {
@@ -11,8 +12,7 @@ namespace Core.DomainServices.Services.Impl
         {
             _canteenRepository = canteenRepository;
         }
-
         public Task<IEnumerable<Canteen>> GetAllCanteensAsync() => _canteenRepository.GetAllCanteensAsync();
-        public Task<Canteen?> GetCanteenByIdAsync(int id) => _canteenRepository.GetCanteenByIdAsync(id);
+        public Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum location) => _canteenRepository.GetCanteenByLocationAsync(location);
     }
 }
