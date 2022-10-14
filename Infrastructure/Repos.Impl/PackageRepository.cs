@@ -11,9 +11,23 @@ namespace Infrastructure.Repos.Impl
         {
             _context = context;
         }
-        public async Task<Package?> GetPackageByIdAsync(int id) => await _context.Packages.FindAsync(id);
+        public async Task<Package?> GetPackageByIdAsync(int id) {
+            
+            return await _context.Packages
+                .Where(p => p.PackageId == id)
+                .Include(p => p.Products)
+                .Include(p => p.Canteen)
+                .Include(p => p.ReservedBy)
+                .FirstOrDefaultAsync();
+        }
 
-        public async Task<IEnumerable<Package>> GetAllPackagesAsync() => await _context.Packages.ToListAsync();
+        public async Task<IEnumerable<Package>> GetAllPackagesAsync() {
+            return await _context.Packages
+                .Include(p => p.Products)
+                .Include(p => p.Canteen)
+                .Include(p => p.ReservedBy)
+                .ToListAsync();
+        }
         public async Task AddPackageAsync(Package package)
         {
             await _context.Packages.AddAsync(package);

@@ -77,6 +77,21 @@ namespace Portal.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> PackageDetails(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+            
+            if(package != null)
+            {
+                ViewBag.Role = this.User.GetRole();
+                return View(package);
+            }
+                
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         [Authorize(Policy = "CanteenEmployee")]
         public IActionResult OurPackages()
         {
