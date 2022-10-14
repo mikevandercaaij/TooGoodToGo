@@ -1,0 +1,44 @@
+﻿@model Package
+@{
+    ViewData["Title"] = Model.Name;
+    var role = ViewBag.Role;
+
+}
+
+<div class="row">
+    <div class="col-sm-12 col-md-4">
+        <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(@Model.Products!.First().Picture!))" alt="@Model.Products.First().Name" />
+    </div>
+
+    <div class="--detail-package-info col-sm-12 col-md-4">
+        <h1>@Model.Name</h1>
+        <p>Prijs: @Model.Price</p>
+        <p>Stad: @Model.Canteen!.City</p>
+        <p>Ophaaldatum en tijd: @Model.PickUpTime</p>
+        <p>Uiterlijke ophaaltijd: @Model.LatestPickUpTime</p>
+        <p>Type maaltijd: @Model.MealType</p>
+    </div>
+
+    <div class="--detail-product-list col-sm-12 col-md-4">
+        <h1>Producten</h1>
+        <ul>
+            @foreach (Product p in Model.Products)
+            {
+                <li>@p.Name</li>
+            }
+        </ul>
+    </div>
+
+    <div class="float-right">
+        @if (role == "Student" && @Model.ReservedBy == null)
+        {
+            <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Reserveer</a>
+        }
+        else if (role == "CanteenEmployee" && @Model.ReservedBy == null)
+        {
+            <a class="--main-btn" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.PackageId">Bewerken</a>
+            <a class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Verwijderen</a>
+        }
+    </div>
+
+</div>

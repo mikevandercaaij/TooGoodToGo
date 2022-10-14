@@ -8,13 +8,13 @@
 
 @foreach (Package p in Model) {
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="..." alt="Card image cap">
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
         <div class="card-body">
             <h5 class="card-title">@p.Name</h5>
             <p class="card-text">Ophaaldatum en tijd: @p.PickUpTime</p>
             <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
             <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
-            <a href="#" class="btn btn-primary">Bekijk</a>
+            <a asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId"  class="btn btn-primary">Bekijk</a>
         </div>
     </div>
 }

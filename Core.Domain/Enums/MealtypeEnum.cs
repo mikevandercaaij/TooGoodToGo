@@ -18,7 +18,7 @@ namespace Core.Domain.Enums
         [Display(Name = "Warme avondmaaltijd")]
 
         WarmDinner,
-
+         
         [Display(Name = "Brood")]
         Bread,
 
