@@ -8,13 +8,15 @@ namespace Core.DomainServices.Services.Impl
         private readonly ICanteenRepository _canteenRepository;
         private readonly ICanteenEmployeeRepository _canteenEmployeeRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public PackageService(IPackageRepository packageRepository, ICanteenEmployeeRepository canteenEmployeeRepository, ICanteenRepository canteenRepository , IProductRepository productRepository)
+        public PackageService(IPackageRepository packageRepository, ICanteenEmployeeRepository canteenEmployeeRepository, ICanteenRepository canteenRepository , IProductRepository productRepository, IStudentRepository studentRepository)
         {
             _packageRepository = packageRepository;
             _canteenEmployeeRepository = canteenEmployeeRepository;
             _canteenRepository = canteenRepository;
             _productRepository = productRepository;
+            _studentRepository = studentRepository;
         }
 
         public async Task AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
@@ -65,6 +67,17 @@ namespace Core.DomainServices.Services.Impl
         public async Task UpdatePackageAsync(Package package)
         {
             await _packageRepository.UpdatePackageAsync(package);
+        }
+
+        public async Task ReservePackage(Package package,string studentNumber)
+        {
+            var user = await _studentRepository.GetStudentByIdAsync(studentNumber);
+
+            if(user != null && package.ReservedBy == null)
+            {
+                package.ReservedBy = user;
+                await _packageRepository.UpdatePackageAsync(package);
+            }
         }
     }
 }

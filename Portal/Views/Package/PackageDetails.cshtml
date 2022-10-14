@@ -34,7 +34,7 @@
         {
             <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Reserveer</a>
         }
-        else if (role == "CanteenEmployee" && @Model.ReservedBy == null)
+        else if (role == "CanteenEmployee" && @Model.ReservedBy == null && ViewBag.Location == Model.Canteen.Location)
         {
             <a class="--main-btn" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.PackageId">Bewerken</a>
             <a class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Verwijderen</a>

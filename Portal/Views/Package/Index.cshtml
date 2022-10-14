@@ -5,16 +5,29 @@
 
 }
 
+@if (Model.Count() > 0)
+{
+    <div class="row">
 
-@foreach (Package p in Model) {
-    <div class="card" style="width: 18rem;">
-        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
-        <div class="card-body">
-            <h5 class="card-title">@p.Name</h5>
-            <p class="card-text">Ophaaldatum en tijd: @p.PickUpTime</p>
-            <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
-            <p class="card-text">Uiterlijke ophaaltijd: @p.LatestPickUpTime</p>
-            <a asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId"  class="btn btn-primary">Bekijk</a>
-        </div>
+            @foreach (Package p in Model)
+            {
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Name</h5>
+                        <p class="card-text">Ophaaldatum: @p.PickUpTime.ToString()</p>
+                        <p class="card-text">Ophaaltijd: @p.PickUpTime.ToString()</p>
+                        <p class="card-text">Prijs: @p.LatestPickUpTime.ToString();</p>
+                        <a class="--main-btn" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">Bekijk</a>
+                        <a class="--main-btn" asp-action="ReservePackages" asp-controller="Package" asp-route-id="@p.PackageId">Reserveer</a>
+                    </div>
+                </div>
+            </div>
+            }
     </div>
+}
+else
+{
+    <h1>Er zijn nog geen pakketten</h1>
 }

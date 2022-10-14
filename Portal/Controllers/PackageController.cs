@@ -16,11 +16,13 @@ namespace Portal.Controllers
     {
         private readonly IPackageService _packageService;
         private readonly IProductService _productService;
+        private readonly ICanteenEmployeeService _canteenEmployeeService;
 
-        public PackageController(IPackageService packageService, IProductService productService)
+        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService)
         {
             _packageService = packageService;
             _productService = productService;
+            _canteenEmployeeService = canteenEmployeeService;
         }
 
         [HttpGet]
@@ -81,10 +83,18 @@ namespace Portal.Controllers
         public async Task<IActionResult> PackageDetails(int id)
         {
             var package = await _packageService.GetPackageByIdAsync(id);
-            
-            if(package != null)
+
+            var role = this.User.GetRole();
+
+            if (package != null)
             {
-                ViewBag.Role = this.User.GetRole();
+                ViewBag.Role = role;
+                
+                if(role == "CanteenEmployee")
+                {
+                    ViewBag.Location = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;
+                }
+
                 return View(package);
             }
                 
@@ -93,9 +103,39 @@ namespace Portal.Controllers
 
         [HttpGet]
         [Authorize(Policy = "CanteenEmployee")]
-        public IActionResult OurPackages()
+        public async Task<IActionResult> OurPackages()
         {
-            return View();
+            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
+            var packages = await _packageService.GetAllPackagesFromCanteenAsync((CanteenLocationEnum)user?.Location!);
+            return View(packages);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> DeletePackage(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+
+            if(package?.ReservedBy == null)
+            {
+                await _packageService.DeletePackageAsync(id);
+                return RedirectToAction("OurPackages");
+            }
+            return View("Index", "Home");
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "Student")]
+        public async Task<IActionResult> ReservePackage(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+
+            if (package != null && package?.ReservedBy == null)
+            {
+                await _packageService.ReservePackage(package!, this.User.Identity?.Name!);
+                return RedirectToAction("OurPackages");
+            }
+            return View("Index", "Home");
         }
     }
 }
