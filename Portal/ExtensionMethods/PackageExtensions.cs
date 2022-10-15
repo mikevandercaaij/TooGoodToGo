@@ -1,0 +1,37 @@
+﻿using System.Security.Claims;
+using System.Text;
+
+namespace Portal.ExtensionMethods
+{
+    public static class PackageExtensions
+    {
+        public static string DisplayProducts(this Package package)
+        {
+            var sb = new StringBuilder();
+
+            var amountOfProducts = package.Products.Count;
+
+
+            for (int i = 0; i < amountOfProducts; i++)
+            {
+                sb.Append(package.Products.ToArray()[i].Name);
+                if (i != amountOfProducts - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        public static string GetLatestPickupTime(this Package package) => package.LatestPickUpTime!.Value.ToString("HH:mm");
+
+        public static string GetPickupDate(this Package package) => package.PickUpTime!.Value.ToString("dd-M-yyyy");
+        public static string GetPickupTime(this Package package) => package.PickUpTime!.Value.ToString("HH:mm");
+
+        public static string GetPickupDateAndTime(this Package package) => package.PickUpTime!.Value.ToString("dd-M-yyyy HH:mm");
+        public static string GetPrice(this Package package) => $"€ {package.Price}";
+        public static string ContainsAlcohol(this Package package) => package.IsAdult!.Value ? "Ja" : "Nee";
+        public static string IsReserved(this Package package) => package.ReservedBy != null ? "Ja" : "Nee";
+    }
+}

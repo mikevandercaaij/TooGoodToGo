@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Reservation\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 

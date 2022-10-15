@@ -1,0 +1,32 @@
+﻿@model Package
+@{
+    ViewData["Title"] = Model.Name;
+    var role = ViewBag.Role;
+    var user = ViewBag.User;   
+
+}
+
+<h1>Reservering @Model.Name @Model.GetPickupDate()</h1>
+
+<div class="row">
+
+    <div class="--reservation-container col-sm-12 col-md-6">
+        <h2>Uw gegevens:</h2>
+        <p>Voornaam: @user.FirstName</p>
+        <p>Achternaam: @user.LastName</p>
+        <p>Studentennummer: @user.LastName</p>
+        <p>E-mailadres: @user.EmailAddress</p>
+    </div>
+
+    <div class="--reservation-container col-sm-12 col-md-6">
+        <h2>Gereserveerde pakket:</h2>
+        <p>@Model.Name</p>
+        <p>Producten: @Model.DisplayProducts()</p>
+        <p>Stad: @Model.Canteen!.City</p>
+        <p>Ophaaldatum en tijd: @Model.GetPickupDateAndTime()</p>
+        <p>Uiterlijke ophaaltijd: @Model.GetLatestPickupTime()</p>
+        <p>Prijs: @Model.GetPrice()</p>
+        <p>Type maaltijd: @Model.MealType</p>
+        <p>Bevat alcohol: @Model.ContainsAlcohol()</p>
+    </div>
+</div>

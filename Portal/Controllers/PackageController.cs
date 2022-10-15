@@ -17,19 +17,22 @@ namespace Portal.Controllers
         private readonly IPackageService _packageService;
         private readonly IProductService _productService;
         private readonly ICanteenEmployeeService _canteenEmployeeService;
+        private readonly IStudentService _studentService;
 
-        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService)
+        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService, IStudentService studentService)
         {
             _packageService = packageService;
             _productService = productService;
             _canteenEmployeeService = canteenEmployeeService;
+            _studentService = studentService;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var packages = await _packageService.GetAllPackagesAsync();
+            ViewBag.Role = this.User.GetRole();
+            var packages = await _packageService.GetAllOfferedPackagesAsync();
             return View(packages);
         }
 
@@ -124,7 +127,6 @@ namespace Portal.Controllers
             return View("Index", "Home");
         }
 
-        [HttpPost]
         [Authorize(Policy = "Student")]
         public async Task<IActionResult> ReservePackage(int id)
         {
@@ -132,10 +134,15 @@ namespace Portal.Controllers
 
             if (package != null && package?.ReservedBy == null)
             {
-                await _packageService.ReservePackage(package!, this.User.Identity?.Name!);
-                return RedirectToAction("OurPackages");
+                var student = await _studentService.GetStudentByIdAsync(this.User.Identity?.Name!);
+                
+                if (student != null)
+                {
+                    await _packageService.ReservePackage(package!, student);
+                    return RedirectToAction("StudentReservations", "Reservation");
+                }
             }
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

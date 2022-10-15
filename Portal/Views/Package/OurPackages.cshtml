@@ -15,9 +15,10 @@
                     <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
                     <div class="card-body">
                         <h5 class="card-title">@p.Name</h5>
-                        <p class="card-text">Ophaaldatum: @p.PickUpTime.ToString()</p>
-                        <p class="card-text">Ophaaltijd: @p.PickUpTime.ToString()</p>
-                        <p class="card-text">Prijs: @p.LatestPickUpTime.ToString();</p>
+                        <p class="card-text">Ophaaldatum: @p.GetPickupDate()</p>
+                        <p class="card-text">Ophaaltijd: @p.GetPickupTime()</p>
+                        <p class="card-text">Prijs: @p.GetPrice()</p>
+                        <p class="card-text">Is gereserveerd: @p.IsReserved()</p>
                         <a class="--main-btn" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">Bekijk</a>
                     </div>
                 </div>

@@ -1,32 +1,42 @@
-﻿
-using Core.Domain.Entities;
-using Core.Domain.Enums;
-using Core.DomainServices.Services.Impl;
-using Core.DomainServices.Services.Intf;
+﻿using Core.DomainServices.Services.Intf;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Portal.ExtensionMethods;
 using Portal.Models;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Portal.Controllers
 {
     public class ReservationController : Controller
     {
-        private readonly IPackageService _packageService;
 
-        public ReservationController(IPackageService packageService)
+        private readonly IPackageService _packageService;
+        private readonly IStudentService _studentService;
+
+        public ReservationController(IPackageService packageService, IStudentService studentService)
         {
             _packageService = packageService;
+            _studentService = studentService;
+        }
+        
+
+        [HttpGet]
+        [Authorize(Policy = "Student")]
+        public async Task<IActionResult> StudentReservations()
+        {
+            var reservations = await _packageService.GetAllReservationsFromStudentAsync(this.User.Identity?.Name!);
+            return View(reservations);
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        [Authorize(Policy = "Student")]
+        public async Task<IActionResult> ReservationDetails(int id)
         {
-            var packages = await _packageService.GetAllPackagesAsync();
-            return View(packages);
+            ViewBag.User = await _studentService.GetStudentByIdAsync(this.User.Identity?.Name!);
+            var reservation = await _packageService.GetPackageByIdAsync(id);
+            return View(reservation);
         }
     }
 }

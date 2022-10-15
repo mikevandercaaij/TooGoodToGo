@@ -69,15 +69,23 @@ namespace Core.DomainServices.Services.Impl
             await _packageRepository.UpdatePackageAsync(package);
         }
 
-        public async Task ReservePackage(Package package,string studentNumber)
+        public async Task ReservePackage(Package package,Student student)
         {
-            var user = await _studentRepository.GetStudentByIdAsync(studentNumber);
-
-            if(user != null && package.ReservedBy == null)
+            if(package.ReservedBy == null)
             {
-                package.ReservedBy = user;
+                package.ReservedBy = student;
                 await _packageRepository.UpdatePackageAsync(package);
             }
+        }
+        public async Task<IEnumerable<Package>> GetAllOfferedPackagesAsync()
+        {
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.PickUpTime > DateTime.Now);
+        }
+
+        public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
+        {
+            var student = await _studentRepository.GetStudentByIdAsync(studentNumber);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student);
         }
     }
 }
