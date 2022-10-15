@@ -1,15 +1,4 @@
 ﻿
-using Core.Domain.Entities;
-using Core.Domain.Enums;
-using Core.DomainServices.Services.Impl;
-using Core.DomainServices.Services.Intf;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Portal.ExtensionMethods;
-using Portal.Models;
-using System.ComponentModel.DataAnnotations;
-
 namespace Portal.Controllers
 {
     public class PackageController : Controller
@@ -31,7 +20,6 @@ namespace Portal.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            ViewBag.Role = this.User.GetRole();
             var packages = await _packageService.GetAllOfferedPackagesAsync();
             return View(packages);
         }
@@ -86,19 +74,21 @@ namespace Portal.Controllers
         public async Task<IActionResult> PackageDetails(int id)
         {
             var package = await _packageService.GetPackageByIdAsync(id);
-
-            var role = this.User.GetRole();
-
+            
             if (package != null)
             {
-                ViewBag.Role = role;
-                
-                if(role == "CanteenEmployee")
-                {
-                    ViewBag.Location = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;
-                }
 
-                return View(package);
+                var model = new PackageDetailsViewModel
+                {
+                    Package = package,
+                };
+
+                if (this.User.GetRole() == "CanteenEmployee")
+                {
+                    model.CanteenEmployeeLocation = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;
+                }
+                
+                return View(model);
             }
                 
             return RedirectToAction("Index");
