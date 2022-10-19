@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Home";
-    ViewBag.CurrentPage = "Home";
 
     var role = this.User.GetRole();
 
@@ -10,7 +9,7 @@
 {
     @role
 }
-else if (ViewBag.Role == "CanteenEmployee")
+else if (role == "CanteenEmployee")
 {
     @role
 }

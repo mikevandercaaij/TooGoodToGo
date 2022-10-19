@@ -27,20 +27,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="@(ViewBag.CurrentPage == "Home" ? "active" : "") nav-link" aria-current="page" href="/">Home</a>
+                            <a class="@((string)ViewData["Title"]! == "Home" ? "active" : "") nav-link" aria-current="page" href="/">Home</a>
                         </li>
 
                         @if (role != "Student" && role != "CanteenEmployee")
                         {
                             <li class="nav-item">
-                                <a class="@(ViewBag.CurrentPage == "Aanbod" ? "active" : "") nav-link" asp-controller="Package" asp-action="Index">Aanbod</a>
+                                <a class="@((string)ViewData["Title"]! == "Aanbod" ? "active" : "") nav-link" asp-controller="Package" asp-action="Index">Aanbod</a>
                             </li>
                         }
 
                         @if (role == "Student")
                         {
-                            <li class="nav-item"><a class="@(ViewBag.CurrentPage == "Aanbod" ? "active" : "") nav-link" asp-controller="Package" asp-action="Index">Aanbod</a></li>
-                            <li class="nav-item"><a class="@(ViewBag.CurrentPage == "Mijn reserveringen" ? "active" : "") nav-link" asp-controller="Reservation" asp-action="StudentReservations">Mijn Reserveringen</a></li>
+                            <li class="nav-item"><a class="@((string)ViewData["Title"]! == "Aanbod" ? "active" : "") nav-link" asp-controller="Package" asp-action="Index">Aanbod</a></li>
+                            <li class="nav-item"><a class="@((string)ViewData["Title"]! == "Mijn reserveringen" ? "active" : "") nav-link" asp-controller="Reservation" asp-action="StudentReservations">Mijn Reserveringen</a></li>
                         }
 
                         @if (role == "CanteenEmployee")
@@ -60,7 +60,7 @@
                     </ul>
                     @if (role != "Student" && role != "CanteenEmployee")
                     {
-                        <a class="@(ViewBag.CurrentPage == "Login" ? "active" : "") nav-link" asp-action="Login" asp-controller="Account">Inloggen</a>
+                        <a class="@((string)ViewData["Title"]! == "Login" ? "active" : "") nav-link" asp-action="Login" asp-controller="Account">Inloggen</a>
                     }
                     else
                     {

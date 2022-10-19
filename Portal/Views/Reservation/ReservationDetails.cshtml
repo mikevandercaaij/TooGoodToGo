@@ -17,8 +17,8 @@
 
     <div class="--reservation-container col-sm-12 col-md-6">
         <h2>Gereserveerde pakket:</h2>
-        <p>@Model.Package!.Name</p>
-        <p>Producten: @Model.Package!.DisplayProducts()</p>
+        <p>Naam: @Model.Package!.Name</p>
+        <p>Mogelijke inhoud: @Model.Package!.DisplayProducts()</p>
         <p>Stad: @Model.Package!.Canteen!.City</p>
         <p>Ophaaldatum en tijd: @Model.Package!.GetPickupDateAndTime()</p>
         <p>Uiterlijke ophaaltijd: @Model.Package!.GetLatestPickupTime()</p>
