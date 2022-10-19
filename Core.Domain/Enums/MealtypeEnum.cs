@@ -4,7 +4,6 @@ namespace Core.Domain.Enums
 {
     public enum MealtypeEnum
     {
-
         [Display(Name = "Ontbijt")]
 
         Breakfast = 1,

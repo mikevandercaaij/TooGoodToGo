@@ -26,6 +26,7 @@ namespace Infrastructure.Repos.Impl
                 .Include(p => p.Products)
                 .Include(p => p.Canteen)
                 .Include(p => p.ReservedBy)
+                .OrderBy(p => p.PickUpTime)
                 .ToListAsync();
         }
         public async Task AddPackageAsync(Package package)
