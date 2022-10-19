@@ -12,14 +12,14 @@
     <div class="--detail-package-info col-sm-12 col-md-4">
         <h1>@Model.Package!.Name</h1>
         <p>Prijs: @Model.Package!.Price</p>
-                                   <p>Stad: @Model.Package!.Canteen!.City</p>
-                                   <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
-                                   <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
-                                   <p>Type maaltijd: @Model.Package!.MealType</p>
+        <p>Stad: @Model.Package!.Canteen!.City</p>
+        <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
+        <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
+        <p>Type maaltijd: @Model.Package!.MealType</p>
     </div>
-
+    
     <div class="--detail-product-list col-sm-12 col-md-4">
-        <h1>Producten</h1>
+        <h1> Mogelijke inhoud</h1>
         <ul>
             @foreach (Product p in Model.Package!.Products)
             {
@@ -28,7 +28,14 @@
         </ul>
     </div>
 
-    <div class="float-right">
+
+    <div class="col-sm-12">
+        
+    <div class="col-sm-12 col-md-6">
+        <p>Disclaimer: Het is mogelijk dat niet alle producten in het pakket zitten.</p>
+    </div>
+
+        <div class="col-sm-12 col-md-6 float-right">
         @if (role == "Student" && @Model.Package!.ReservedBy == null)
         {
             <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Reserveer</a>
@@ -39,5 +46,5 @@
             <a class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Verwijderen</a>
         }
     </div>
-
+    </div>
 </div>
