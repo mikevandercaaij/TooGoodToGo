@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<Package>
 @{
-    ViewData["Title"] = "Aanbod";
-    ViewBag.CurrentPage = "Aanbod";
-
-    var role = this.User.GetRole();
+    ViewData["Title"] = "Mijn reserveringen";
+    ViewBag.CurrentPage = "Mijn reserveringen";
 
 }
 
@@ -11,8 +9,8 @@
 {
     <div class="row">
 
-            @foreach (Package p in Model)
-            {
+        @foreach (Package p in Model)
+        {
             <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
@@ -21,18 +19,14 @@
                         <p class="card-text">Ophaaldatum: @p.PickUpTime.ToString()</p>
                         <p class="card-text">Ophaaltijd: @p.PickUpTime.ToString()</p>
                         <p class="card-text">Prijs: @p.LatestPickUpTime.ToString();</p>
-                        <a class="--main-btn" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">Bekijk</a>
-                        @if (role == "Student" && p.ReservedBy == null)
-                        {
-                            <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@p.PackageId">Reserveer</a>
-                        }
+                        <a class="--main-btn" asp-action="ReservationDetails" asp-controller="Reservation" asp-route-id="@p.PackageId">Bekijk details</a>
                     </div>
                 </div>
             </div>
-            }
+        }
     </div>
 }
 else
 {
-    <h1>Er zijn nog geen pakketten</h1>
+    <h1>Je hebt nog geen pakketten gereserveerd</h1>
 }

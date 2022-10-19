@@ -8,13 +8,15 @@ namespace Core.DomainServices.Services.Impl
         private readonly ICanteenRepository _canteenRepository;
         private readonly ICanteenEmployeeRepository _canteenEmployeeRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public PackageService(IPackageRepository packageRepository, ICanteenEmployeeRepository canteenEmployeeRepository, ICanteenRepository canteenRepository , IProductRepository productRepository)
+        public PackageService(IPackageRepository packageRepository, ICanteenEmployeeRepository canteenEmployeeRepository, ICanteenRepository canteenRepository , IProductRepository productRepository, IStudentRepository studentRepository)
         {
             _packageRepository = packageRepository;
             _canteenEmployeeRepository = canteenEmployeeRepository;
             _canteenRepository = canteenRepository;
             _productRepository = productRepository;
+            _studentRepository = studentRepository;
         }
 
         public async Task AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
@@ -65,6 +67,25 @@ namespace Core.DomainServices.Services.Impl
         public async Task UpdatePackageAsync(Package package)
         {
             await _packageRepository.UpdatePackageAsync(package);
+        }
+
+        public async Task ReservePackage(Package package,Student student)
+        {
+            if(package.ReservedBy == null)
+            {
+                package.ReservedBy = student;
+                await _packageRepository.UpdatePackageAsync(package);
+            }
+        }
+        public async Task<IEnumerable<Package>> GetAllOfferedPackagesAsync()
+        {
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.PickUpTime > DateTime.Now);
+        }
+
+        public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
+        {
+            var student = await _studentRepository.GetStudentByIdAsync(studentNumber);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student);
         }
     }
 }

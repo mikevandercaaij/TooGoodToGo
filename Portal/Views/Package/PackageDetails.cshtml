@@ -1,28 +1,28 @@
-﻿@model Package
+﻿@model PackageDetailsViewModel
 @{
-    ViewData["Title"] = Model.Name;
-    var role = ViewBag.Role;
-
+    ViewData["Title"] = Model.Package!.Name;
+    var role = this.User.GetRole();
+    var canteenEmployeeLocation = 
 }
 
 <div class="row">
     <div class="col-sm-12 col-md-4">
-        <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(@Model.Products!.First().Picture!))" alt="@Model.Products.First().Name" />
+                                   <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(@Model.Package!.Products!.First().Picture!))" alt="@Model.Package!.Products.First().Name" />
     </div>
 
     <div class="--detail-package-info col-sm-12 col-md-4">
-        <h1>@Model.Name</h1>
-        <p>Prijs: @Model.Price</p>
-        <p>Stad: @Model.Canteen!.City</p>
-        <p>Ophaaldatum en tijd: @Model.PickUpTime</p>
-        <p>Uiterlijke ophaaltijd: @Model.LatestPickUpTime</p>
-        <p>Type maaltijd: @Model.MealType</p>
+        <h1>@Model.Package!.Name</h1>
+        <p>Prijs: @Model.Package!.Price</p>
+                                   <p>Stad: @Model.Package!.Canteen!.City</p>
+                                   <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
+                                   <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
+                                   <p>Type maaltijd: @Model.Package!.MealType</p>
     </div>
 
     <div class="--detail-product-list col-sm-12 col-md-4">
         <h1>Producten</h1>
         <ul>
-            @foreach (Product p in Model.Products)
+            @foreach (Product p in Model.Package!.Products)
             {
                 <li>@p.Name</li>
             }
@@ -30,14 +30,14 @@
     </div>
 
     <div class="float-right">
-        @if (role == "Student" && @Model.ReservedBy == null)
+        @if (role == "Student" && @Model.Package!.ReservedBy == null)
         {
-            <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Reserveer</a>
+            <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Reserveer</a>
         }
-        else if (role == "CanteenEmployee" && @Model.ReservedBy == null)
+        else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
         {
-            <a class="--main-btn" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.PackageId">Bewerken</a>
-            <a class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.PackageId">Verwijderen</a>
+            <a class="--main-btn" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Bewerken</a>
+            <a class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Verwijderen</a>
         }
     </div>
 

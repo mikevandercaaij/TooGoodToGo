@@ -1,3 +1,9 @@
 ﻿global using Core.DomainServices;
 global using Infrastructure.Contexts;
 global using Core.Domain.Entities;
+global using Portal.ExtensionMethods;
+global using Core.Domain.Enums;
+global using Core.DomainServices.Services.Intf;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Portal.Models;

@@ -1,33 +1,26 @@
 ﻿
-using Core.Domain.Entities;
-using Core.Domain.Enums;
-using Core.DomainServices.Services.Impl;
-using Core.DomainServices.Services.Intf;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Portal.ExtensionMethods;
-using Portal.Models;
-using System.ComponentModel.DataAnnotations;
-
 namespace Portal.Controllers
 {
     public class PackageController : Controller
     {
         private readonly IPackageService _packageService;
         private readonly IProductService _productService;
+        private readonly ICanteenEmployeeService _canteenEmployeeService;
+        private readonly IStudentService _studentService;
 
-        public PackageController(IPackageService packageService, IProductService productService)
+        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService, IStudentService studentService)
         {
             _packageService = packageService;
             _productService = productService;
+            _canteenEmployeeService = canteenEmployeeService;
+            _studentService = studentService;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var packages = await _packageService.GetAllPackagesAsync();
+            var packages = await _packageService.GetAllOfferedPackagesAsync();
             return View(packages);
         }
 
@@ -82,10 +75,20 @@ namespace Portal.Controllers
         {
             var package = await _packageService.GetPackageByIdAsync(id);
             
-            if(package != null)
+            if (package != null)
             {
-                ViewBag.Role = this.User.GetRole();
-                return View(package);
+
+                var model = new PackageDetailsViewModel
+                {
+                    Package = package,
+                };
+
+                if (this.User.GetRole() == "CanteenEmployee")
+                {
+                    model.CanteenEmployeeLocation = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;
+                }
+                
+                return View(model);
             }
                 
             return RedirectToAction("Index");
@@ -93,9 +96,43 @@ namespace Portal.Controllers
 
         [HttpGet]
         [Authorize(Policy = "CanteenEmployee")]
-        public IActionResult OurPackages()
+        public async Task<IActionResult> OurPackages()
         {
-            return View();
+            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
+            var packages = await _packageService.GetAllPackagesFromCanteenAsync((CanteenLocationEnum)user?.Location!);
+            return View(packages);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> DeletePackage(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+
+            if(package?.ReservedBy == null)
+            {
+                await _packageService.DeletePackageAsync(id);
+                return RedirectToAction("OurPackages");
+            }
+            return View("Index", "Home");
+        }
+
+        [Authorize(Policy = "Student")]
+        public async Task<IActionResult> ReservePackage(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+
+            if (package != null && package?.ReservedBy == null)
+            {
+                var student = await _studentService.GetStudentByIdAsync(this.User.Identity?.Name!);
+                
+                if (student != null)
+                {
+                    await _packageService.ReservePackage(package!, student);
+                    return RedirectToAction("StudentReservations", "Reservation");
+                }
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

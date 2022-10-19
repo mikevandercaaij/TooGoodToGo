@@ -39,8 +39,8 @@
 
                         @if (role == "Student")
                         {
-                            <li class="nav-item"><a class="nav-link" asp-controller="Package" asp-action="Index">Aanbod</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-action="">Mijn Reserveringen</a></li>
+                            <li class="nav-item"><a class="@(ViewBag.CurrentPage == "Aanbod" ? "active" : "") nav-link" asp-controller="Package" asp-action="Index">Aanbod</a></li>
+                            <li class="nav-item"><a class="@(ViewBag.CurrentPage == "Mijn reserveringen" ? "active" : "") nav-link" asp-controller="Reservation" asp-action="StudentReservations">Mijn Reserveringen</a></li>
                         }
 
                         @if (role == "CanteenEmployee")
@@ -55,8 +55,6 @@
                                     <li><a class="dropdown-item"  asp-controller="Package" asp-action="OurPackages">Onze pakketten</a></li>
                                 </ul>
                             </li>
-
-                            <li class="nav-item"><a class="nav-link" asp-action="">Reserveringen</a></li>
                         }
 
                     </ul>

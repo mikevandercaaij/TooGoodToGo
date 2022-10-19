@@ -1,15 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Home";
     ViewBag.CurrentPage = "Home";
+
+    var role = this.User.GetRole();
+
 }
 
-@if (ViewBag.Role == "Student")
+@if (role == "Student")
 {
-    @ViewBag.Role
+    @role
 }
 else if (ViewBag.Role == "CanteenEmployee")
 {
-    @ViewBag.Role
+    @role
 }
 else
 {
