@@ -16,7 +16,7 @@
         [Required(ErrorMessage = "Geef aan tot wanneer het pakket opgehaald mag worden!")]
         public DateTime? LatestPickUpTime { get; set; }
 
-        public bool? IsAdult { get; set; }
+        public bool? IsAdult { get; set; } = false;
 
         [Required(ErrorMessage = "Geef aan hoe duur het pakket moet worden!")]
         public decimal? Price { get; set; }

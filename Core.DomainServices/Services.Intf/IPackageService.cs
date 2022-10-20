@@ -15,7 +15,6 @@ namespace Core.DomainServices.Services.Intf
         Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(CanteenLocationEnum location);
         Task<IEnumerable<Package>> GetAllOfferedPackagesAsync();
 
-
         //Reservations
         Task ReservePackage(Package package, Student student);
         Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber);

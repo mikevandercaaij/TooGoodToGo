@@ -1,4 +1,8 @@
 ﻿
+using Portal.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+
 namespace Portal.Controllers
 {
     public class PackageController : Controller
@@ -71,9 +75,12 @@ namespace Portal.Controllers
                 ModelState.AddModelError("PickUpTime", "De afhaaltijd moet in de toekomst liggen!");
             }
 
-            if (packageModel.PickUpTime!.Value.Day > DateTime.Now.AddDays(2).Day)
+            if (packageModel.PickUpTime.HasValue)
             {
-                ModelState.AddModelError("PickUpTime", "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                if (packageModel.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
+                {
+                    ModelState.AddModelError("PickUpTime", "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                }
             }
 
             if (packageModel.LatestPickUpTime < DateTime.Now)
@@ -118,7 +125,6 @@ namespace Portal.Controllers
 
             if (package != null)
             {
-
                 var model = new PackageDetailsViewModel
                 {
                     Package = package,
@@ -141,7 +147,54 @@ namespace Portal.Controllers
         {
             var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
             var packages = await _packageService.GetAllPackagesFromCanteenAsync((CanteenLocationEnum)user?.Location!);
+
             return View(packages);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> EditPackage(int id)
+        {
+            var package = await _packageService.GetPackageByIdAsync(id);
+
+            if(package != null)
+            {
+                bool isOurPackage = await IsOurCanteensPackage(package);
+
+                if(isOurPackage)
+                {
+                    if (package?.ReservedBy == null)
+                    {
+
+                        var module = new PackageModel()
+                        {
+                            Name = package!.Name,
+                            Products = package!.Products,
+                            PickUpTime = package!.PickUpTime,
+                            LatestPickUpTime = package!.LatestPickUpTime,
+                            Price = package!.Price,
+                            MealType = package!.MealType
+                        };
+
+                        return View(module);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("EditPackage", "De maaltijd is al gereserveerd en mag dan ook niet worden bewerkt!");
+                    }
+                } 
+                else
+                {
+                    ModelState.AddModelError("EditPackage", "Het is niet toegestaan om pakketten van andere kantines te bewerken!");
+                }
+            }
+
+            var model = new PackageDetailsViewModel
+            {
+                Package = package,
+            };
+
+            return View("PackageDetails", model);
         }
 
         [HttpPost]
@@ -150,12 +203,34 @@ namespace Portal.Controllers
         {
             var package = await _packageService.GetPackageByIdAsync(id);
 
-            if (package?.ReservedBy == null)
+            if (package != null)
             {
-                await _packageService.DeletePackageAsync(id);
-                return RedirectToAction("OurPackages");
+                bool isOurPackage = await IsOurCanteensPackage(package);
+
+                if (isOurPackage)
+                {
+                    if (package?.ReservedBy == null)
+                    {
+                        await _packageService.DeletePackageAsync(id);
+                        return RedirectToAction("OurPackages");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("DeletePackage", "De maaltijd is al gereserveerd en mag dan ook niet worden verwijderd!");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("DeletePackage", "Het is niet toegestaan om pakketten van andere kantines te verwijderen!");
+                }
             }
-            return View("Index", "Home");
+
+            var model = new PackageDetailsViewModel
+            {
+                Package = package,
+            };
+
+            return View("PackageDetails", model);
         }
 
         [Authorize(Policy = "Student")]
@@ -169,11 +244,65 @@ namespace Portal.Controllers
 
                 if (student != null)
                 {
-                    await _packageService.ReservePackage(package!, student);
-                    return RedirectToAction("StudentReservations", "Reservation");
+                    var studentIsAdult = student.DateOfBirth!.Value.AddYears(18) <= package!.PickUpTime!.Value;
+
+                    if (package!.IsAdult!.Value && studentIsAdult || !(package!.IsAdult!.Value))
+                    {
+
+                        var packages = await _packageService.GetAllReservationsFromStudentAsync(this.User.Identity?.Name!);
+
+                        bool alreadyReserved = false;
+
+                        foreach (Package p in packages)
+                        {
+                            if(p.PickUpTime!.Value.Date == package.PickUpTime.Value.Date)
+                            {
+                                alreadyReserved = true;
+                            }
+                        }
+
+                        if(!alreadyReserved)
+                        {
+                            await _packageService.ReservePackage(package!, student);
+                            return RedirectToAction("StudentReservations", "Reservation");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Reservation", "Je hebt al een pakket gereserveerd op deze ophaaldag!");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Reservation", "Je bent nog geen 18 jaar oud en mag dus geen pakketten met alcoholische inhoud reserveren!");
+                    }
                 }
             }
-            return RedirectToAction("Index", "Home");
+            else
+            {
+                ModelState.AddModelError("Reservation", "Deze maaltijd is al gereserveerd door iemand anders!");
+            }
+
+
+            var model = new PackageDetailsViewModel
+            {
+                Package = package,
+            };
+
+            return View("PackageDetails", model);
+        }
+
+        public async Task<bool> IsOurCanteensPackage(Package package)
+        {
+            var canteenEmployee = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
+
+            if(canteenEmployee != null)
+            {
+                if(canteenEmployee.Location == package.Canteen!.Location)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<Package>
 @{
     ViewData["Title"] = "Onze pakketten";
-
 }
 
 @if (Model.Count() > 0)
 {
     <div class="row">
-            @foreach (Package p in Model)
-            {
+        @foreach (Package p in Model)
+        {
             <div class="col-sm-12 col-md-3">
                 <div class="card">
                     <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
@@ -18,11 +17,20 @@
                         <p class="card-text">Ophaaltijd: @p.GetPickupTime()</p>
                         <p class="card-text">Prijs: @p.GetPrice()</p>
                         <p class="card-text">Is gereserveerd: @p.IsReserved()</p>
-                        <a class="--main-btn" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">Bekijk</a>
+
+                        <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@p.PackageId">
+                            <button class="--main-btn" type="submit">Bewerken</button>
+                        </form>
+
+                        <div class="col-md-12">
+                            <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@p.PackageId">
+                                <button class="--main-btn" type="submit">Verwijderen</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            }
+        }
     </div>
 }
 else

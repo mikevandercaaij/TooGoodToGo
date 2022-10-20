@@ -20,10 +20,7 @@
                         <p class="card-text">Ophaaltijd: @p.PickUpTime.ToString()</p>
                         <p class="card-text">Prijs: @p.LatestPickUpTime.ToString()</p>
                         <a class="--main-btn" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">Bekijk</a>
-                        @if (role == "Student" && p.ReservedBy == null)
-                        {
-                            <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@p.PackageId">Reserveer</a>
-                        }
+                        <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@p.PackageId">Reserveer</a>
                     </div>
                 </div>
             </div>
