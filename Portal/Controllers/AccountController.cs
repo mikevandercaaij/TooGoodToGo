@@ -167,7 +167,6 @@ namespace Portal.Controllers
 
             if (!ModelState.IsValid)
             {
-
                 if (ModelState["Location"]?.Errors.Count > 0)
                 {
                     ModelState["Location"]?.Errors.Clear();
