@@ -5,6 +5,7 @@ namespace Portal.Models
 {
     public class PackageModel
     {
+        public int? PackageId { get; set; }
         public IList<string>? SelectedProducts { get; set; } 
         public IList<SelectListItem>? AvailableProducts { get; set; }
 

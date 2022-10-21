@@ -36,7 +36,7 @@ namespace Infrastructure.Repos.Impl
         }
         public async Task UpdatePackageAsync(Package package)
         {
-            _context.Packages.Update(package);
+            _context.Update(package);
             await _context.SaveChangesAsync();
         }
 

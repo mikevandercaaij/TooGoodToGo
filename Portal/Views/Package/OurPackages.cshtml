@@ -18,13 +18,17 @@
                         <p class="card-text">Prijs: @p.GetPrice()</p>
                         <p class="card-text">Is gereserveerd: @p.IsReserved()</p>
 
+                        <form method="get" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
+                            <button class="--main-btn" type="submit">Bekijk details</button>
+                        </form>
+
                         <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@p.PackageId">
-                            <button class="--main-btn" type="submit">Bewerken</button>
+                            <button class="--main-btn" type="submit">Bewerk pakket</button>
                         </form>
 
                         <div class="col-md-12">
                             <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@p.PackageId">
-                                <button class="--main-btn" type="submit">Verwijderen</button>
+                                <button class="--main-btn" type="submit">Verwijder pakket</button>
                             </form>
                         </div>
                     </div>

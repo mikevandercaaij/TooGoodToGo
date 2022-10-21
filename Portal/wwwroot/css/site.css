@@ -31,6 +31,35 @@ body {
     background-color: var(--beige);
 }
 
+/* Home cards */
+
+.--custom-card {
+    background-color: transparent;
+    border: none;
+    margin-top:15px
+}
+
+.--custom-card-body {
+    border: 1px solid rgba(0,0,0,.125);
+    background-color: #fff;
+}
+
+.--home-card-aTag, .--home-card-aTag:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.--home-card-img {
+    width: 150px;
+    height: auto;
+}
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+
 /* Home */
 
 .--home-hero-section {
