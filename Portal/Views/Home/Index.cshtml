@@ -13,7 +13,7 @@
     </div>
 
     <hr />
-    
+
     @if (role == "Student")
     {
         <h2>Al jouw actieve reserveringen:</h2>
@@ -23,7 +23,7 @@
     {
         <h2>Alle actieve reserveringen:</h2>
     }
-    
+
 
     @if (Model.Count() > 0)
     {
@@ -49,7 +49,8 @@
     }
     else
     {
-        @if (role == "Student") {
+        @if (role == "Student")
+        {
             <p>Je hebt momenteel nog niks gereserveerd.</p>
         }
         else
@@ -63,10 +64,40 @@ else
     <section class="text-center">
         <h1 class="--header-main --home-hero-section">Welkom op Avans Too Good To Go</h1>
         <h2 class="--header-sub-main">Maak snel een account aan!</h2>
-        <div class="--home-btn-holder">
-            <a class="--main-btn" asp-action="RegisterStudent" asp-controller="Account">Student</a>
-            <a class="--main-btn" asp-action="RegisterCanteenEmployee" asp-controller="Account">Kantinemedewerker</a>
-        </div>
         <p>Heb je al een account? Klik <a class="--text-link" asp-action="Login" asp-controller="Account">hier</a> om in te loggen</p>
+
+        <div class="--home-btn-holder">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 half-hero-card left-hero-card">
+                    <div class="--home-hero-button">
+                        <a asp-action="RegisterStudent" asp-controller="Account">
+                        <div>
+                            <img src="~/img/studentHeroImg.svg" class="--hero-img" />
+                        </div>
+                        <div class="--home-hero-button-holder-button">
+                            <form method="get" asp-action="RegisterStudent" asp-controller="Account">
+                                <button class="--main-btn">Student</button>
+                            </form>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 half-hero-card right-hero-card">
+                    <div class="--home-hero-button">
+                        <a asp-action="RegisterCanteenEmployee" asp-controller="Account">
+                        <div>
+                                <img src="~/img/canteenEmployeeHeroImg.svg" class="--hero-img" />
+                        </div>
+                        <div class="--home-hero-button-holder-button">
+                            <form method="get" asp-action="RegisterCanteenEmployee" asp-controller="Account">
+                                <button class="--main-btn">Kantinemedewerker</button>
+                            </form>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 }

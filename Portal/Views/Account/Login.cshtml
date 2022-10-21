@@ -3,18 +3,38 @@
     ViewBag.Title = "Login";
 }
 
+<div class="col-lg-6 --login-img-holder">
+    <img class="--login-hero-img" src="~/img/loginHeroImg.svg" />
+</div>
+<div class="col-sm-12 col-lg-6 --login-holder">
+    <div class="--form-title">
+        <h2>Inloggen</h2>
+    </div>
 
-<form asp-action="Login" asp-controller="Account" method="post">
-    <input type="hidden" asp-for="ReturnUrl" />
-    <div class="form-group">
-        <label asp-for="UserId"></label>
-        <input asp-for="UserId" class="form-control" />
-        <span asp-validation-for="UserId" class="text-danger"></span>
+    <div class="--login-form-holder">
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="form-group">
+                <label asp-for="UserId"></label>
+                <div><span asp-validation-for="UserId" class="text-danger"></span></div>
+                <input asp-for="UserId" class="form-control --input" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                <input asp-for="Password" class="form-control --input" />
+            </div>
+            <button class="--main-btn" style="margin-top:15px;" type="submit">Inloggen</button>
+        </form>
+
+
+        <div class="--login-form-footer">
+            <p>Heb je nog geen account? Maak er snel één aan!</p>
+        </div>
+
+        <div class="--login-form-footer">
+            <div><a class="--text-link" asp-action="RegisterStudent" asp-controller="Account">Student</a></div>
+            <div><a class="--text-link" asp-action="RegisterCanteenEmployee" asp-controller="Account">Kantimedewerker</a></div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button class="btn btn-primary" style="margin-top:15px;" type="submit">Inloggen</button>
-</form>
+</div>

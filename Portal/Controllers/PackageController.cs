@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portal.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
@@ -163,7 +164,7 @@ namespace Portal.Controllers
 
                 if(isOurPackage)
                 {
-                    if (package?.ReservedBy == null)
+                    if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
                     {
                         var module = new PackageModel()
                         {
@@ -295,7 +296,7 @@ namespace Portal.Controllers
 
                 if (isOurPackage)
                 {
-                    if (package?.ReservedBy == null)
+                    if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
                     {
                         await _packageService.DeletePackageAsync(id);
                         return RedirectToAction("OurPackages");
