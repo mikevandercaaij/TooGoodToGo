@@ -4,33 +4,47 @@
     ViewBag.Title = "Registreren";
 }
 
-<form asp-action="RegisterCanteenEmployee" asp-controller="Account" method="post">
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <div><span asp-validation-for="FirstName" class="text-danger"></span></div>
-        <input asp-for="FirstName" class="form-control" />
+<div class="col-12 --form-holder">
+    <div class="--form-title">
+            <h2>Registreren</h2>
+            <p>Kantinemedewerker</p>
     </div>
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <div><span asp-validation-for="LastName" class="text-danger"></span></div>
-        <input asp-for="LastName" class="form-control" />
+
+    <div class="--form-content-holder">
+        <form asp-action="RegisterCanteenEmployee" asp-controller="Account" method="post">
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <div><span asp-validation-for="FirstName" class="text-danger"></span></div>
+                <input class="--input form-control" asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <div><span asp-validation-for="LastName" class="text-danger"></span></div>
+                <input class="--input form-control" asp-for="LastName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId"></label>
+                <div><span asp-validation-for="EmployeeId" class="text-danger"></span></div>
+                <input class="--input form-control" asp-for="EmployeeId" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Location"></label>
+                <div><span asp-validation-for="Location" class="text-danger"></span></div>
+                <select class="--input form-control" asp-for="Location" class="form-control" asp-items="Html.GetEnumSelectList<CanteenLocationEnum>()">
+                    <option>Selecteer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                <input class="--input form-control" type="password" asp-for="Password" class="form-control" />
+            </div>
+            <button class="--main-btn" style="margin-top:15px;" type="submit">Account aanmaken</button>
+
+            <p class="--form-footer-text">Heb je al een account? Klik <a class="--text-link" asp-action="Login" asp-controller="Account">hier</a> om in te loggen</p>
+
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="EmployeeId"></label>
-        <div><span asp-validation-for="EmployeeId" class="text-danger"></span></div>
-        <input asp-for="EmployeeId" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Location"></label>
-        <div><span asp-validation-for="Location" class="text-danger"></span></div>
-        <select asp-for="Location" class="form-control" asp-items="Html.GetEnumSelectList<CanteenLocationEnum>()">
-            <option>Selecteer</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <div><span asp-validation-for="Password" class="text-danger"></span></div>
-        <input type="password" asp-for="Password" class="form-control" />
-    </div>
-    <button class="btn btn-primary" style="margin-top:15px;" type="submit">Registreer</button>
-</form>
+</div>
+
+

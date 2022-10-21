@@ -81,7 +81,7 @@ namespace Core.DomainServices.Services.Impl
         public async Task<IEnumerable<Package>> GetAllActivePackagesFromCanteenAsync(CanteenLocationEnum location)
         {
             var allPackages = await _packageRepository.GetAllPackagesAsync();
-            return allPackages.Where(p => p.Canteen?.Location == location).Where(p => p.PickUpTime > DateTime.Now).Where(p => p.ReservedBy != null).OrderBy(p => p.PickUpTime);
+            return allPackages.Where(p => p.Canteen?.Location == location).Where(p => p.LatestPickUpTime > DateTime.Now).Where(p => p.ReservedBy != null).OrderBy(p => p.PickUpTime);
         }
 
         public async Task<Package?> GetPackageByIdAsync(int id) => await _packageRepository.GetPackageByIdAsync(id);
@@ -96,7 +96,7 @@ namespace Core.DomainServices.Services.Impl
         }
         public async Task<IEnumerable<Package>> GetAllOfferedPackagesAsync()
         {
-            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.PickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.LatestPickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
 
         public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
@@ -108,7 +108,7 @@ namespace Core.DomainServices.Services.Impl
         public async Task<IEnumerable<Package>> GetAllActiveReservationsFromStudentAsync(string studentNumber)
         {
             var student = await _studentRepository.GetStudentByIdAsync(studentNumber);
-            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student).Where(p => p.PickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student).Where(p => p.LatestPickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
     }
 }
