@@ -145,11 +145,11 @@ main {
     min-height: 100%;
 }
 
-    .--home-hero-button img {
-        padding: 30px 30px 0 30px;
-        width: 95%;
-        height: 250px;
-    }
+.--hero-img {
+    padding: 30px 30px 0 30px;
+    width: 95%;
+    height: 250px;
+}
 
     .--home-hero-button button {
         background-color: var(--beige);
@@ -166,6 +166,81 @@ main {
     justify-content: center;
     align-items: end;
 }
+
+/* Login
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
+
+.--login-hero-img {
+    padding: 30px 30px 0 30px;
+    width: 100%;
+    height: 300px;
+}
+
+.--login-img-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--secondary-color);
+    border-top: 15px solid var(--primary-color);
+    border-left: 15px solid var(--primary-color);
+    border-bottom: 15px solid var(--primary-color);
+    min-height: 600px;
+}
+
+.--login-holder {
+    background-color: #FFFFFF;
+    min-height: 600px;
+    border-right: 15px solid var(--primary-color);
+    border-bottom: 15px solid var(--primary-color);
+    border-left: 15px solid var(--primary-color);
+}
+
+.--login-form-holder {
+    padding: 50px;
+}
+
+    .--login-form-holder .form-group {
+        padding-bottom: 25px;
+    }
+
+.--login-form-holder .--main-btn {
+    margin-bottom: 30px;
+}
+
+.--login-title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: var(--primary-color);
+    color: var(--beige);
+    padding: 30px;
+}
+
+.--login-form-footer {
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+}
+
+/* Form 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
+
+.--input {
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid var(--primary-color);
+    padding-left:0;
+}
+
+.--input:focus {
+    border-bottom: 2px solid var(--secondary-color);
+    box-shadow:none;
+}
+
+
 /* Navbar 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
@@ -399,6 +474,11 @@ footer {
     .--header-sub-main {
         font-size: 25px;
     }
+
+    .--login-img-holder {
+        display:none;
+    }
+
 }
 
 /* Small devices */
@@ -416,6 +496,9 @@ footer {
 
     .--header-sub-main {
         font-size: 28px;
+    }
+    .--login-img-holder {
+        display: none;
     }
 }
 
@@ -435,6 +518,9 @@ footer {
 
     .--header-sub-main {
         font-size: 34px;
+    }
+    .--login-img-holder {
+        display: none;
     }
 }
 

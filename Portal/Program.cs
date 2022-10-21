@@ -1,21 +1,15 @@
 using Core.DomainServices.Repos.Intf;
 using Core.DomainServices.Services.Impl;
-using Core.DomainServices.Services.Intf;
 using Infrastructure.Repos.Impl;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDatabaseTGTG");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 var userConnectionString = builder.Configuration.GetConnectionString("SecurityDatabaseTGTG");
 builder.Services.AddDbContext<SecurityDbContext>(options => options.UseSqlServer(userConnectionString));
-
-//TODO: Add password validation later instead of the following password requirements
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     options.SignIn.RequireConfirmedEmail = false;
@@ -32,8 +26,6 @@ builder.Services.AddAuthentication("CookieAuth")
         config.Cookie.Name = "AuthorizationCookieTGTG";
         config.LoginPath = "/Account/Login";
     });
-
-builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddAuthorization(config =>
 {
