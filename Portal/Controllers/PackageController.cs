@@ -165,16 +165,26 @@ namespace Portal.Controllers
                 {
                     if (package?.ReservedBy == null)
                     {
-
                         var module = new PackageModel()
                         {
+                            PackageId = package!.PackageId,
                             Name = package!.Name,
                             Products = package!.Products,
                             PickUpTime = package!.PickUpTime,
                             LatestPickUpTime = package!.LatestPickUpTime,
                             Price = package!.Price,
-                            MealType = package!.MealType
+                            MealType = package!.MealType,
+                            AvailableProducts = await _productService.GetAllSelectListItems(),
                         };
+
+                        var _selectedProducts = new List<string>();
+
+                        foreach(Product p in package.Products)
+                        {
+                            _selectedProducts.Add(p.Name!);  
+                        }
+
+                        module.SelectedProducts = _selectedProducts;
 
                         return View(module);
                     }
@@ -195,6 +205,82 @@ namespace Portal.Controllers
             };
 
             return View("PackageDetails", model);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> EditPackage(int id, PackageModel packageModel)
+        {
+            if (ModelState["Mealtype"]?.Errors.Count > 0)
+            {
+                ModelState["Mealtype"]?.Errors.Clear();
+                ModelState["Mealtype"]?.Errors.Add("Selecteer een type maaltijd!");
+            }
+
+            if (!(ModelState["Mealtype"]?.Errors.Count > 0))
+            {
+                var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
+
+                if (user != null)
+                {
+                    var canteen = await _canteenService.GetCanteenByLocationAsync(user.Location!.Value);
+
+                    if (canteen != null)
+                    {
+                        if (!canteen.ServesWarmMeals!.Value && packageModel.MealType == MealtypeEnum.WarmDinner)
+                        {
+                            ModelState["Mealtype"]?.Errors.Clear();
+                            ModelState["Mealtype"]?.Errors.Add("Jouw kantine serveert geen warme maaltijden!");
+                        }
+                    }
+                }
+            }
+
+            if (packageModel.PickUpTime < DateTime.Now)
+            {
+                ModelState.AddModelError("PickUpTime", "De afhaaltijd moet in de toekomst liggen!");
+            }
+
+            if (packageModel.PickUpTime.HasValue)
+            {
+                if (packageModel.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
+                {
+                    ModelState.AddModelError("PickUpTime", "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                }
+            }
+
+            if (packageModel.LatestPickUpTime < DateTime.Now)
+            {
+                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet in de toekomst liggen!");
+            }
+            else if (packageModel.LatestPickUpTime <= packageModel.PickUpTime)
+            {
+                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!");
+            }
+
+            if (packageModel.SelectedProducts?.Count == 0)
+            {
+                ModelState.AddModelError("Products", "Selecter minimaal één product!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                packageModel.AvailableProducts = await _productService.GetAllSelectListItems();
+                return View(packageModel);
+            }
+
+            
+            Package package = (await _packageService.GetPackageByIdAsync(id))!;
+            
+            package.Name = packageModel.Name;
+            package.PickUpTime = packageModel.PickUpTime;
+            package.LatestPickUpTime = packageModel.LatestPickUpTime;
+            package.Price = packageModel.Price;
+            package.MealType = packageModel.MealType;
+            package.Products = new List<Product>();
+
+            await _packageService.UpdatePackageAsync(package, packageModel.SelectedProducts!);
+            return RedirectToAction("PackageDetails", new { id });
         }
 
         [HttpPost]

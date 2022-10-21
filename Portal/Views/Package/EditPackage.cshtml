@@ -5,7 +5,7 @@
     ViewData["Title"] = "Pakket bewerken";
 }
 
-<form asp-action="EditPackage" asp-controller="Package" method="post">
+<form asp-action="EditPackage" asp-route-id="@Model.PackageId" asp-controller="Package" method="post">
     <div class="form-group">
         <label asp-for="Name"></label>
         <div><span asp-validation-for="Name" class="text-danger"></span></div>
@@ -35,12 +35,12 @@
     <div class="form-group">
         <label asp-for="PickUpTime"></label>
         <div><span asp-validation-for="PickUpTime" class="text-danger"></span></div>
-        <input asp-for="PickUpTime" class="form-control" value="@Model.PickUpTime.ToString("YYYY-MM-DDTHH:MM")" />
+        <input asp-for="PickUpTime" class="form-control" value="@Model.PickUpTime!.Value.ToString("yyyy-MM-ddTHH:mm:ss")"  />
     </div>
     <div class="form-group">
         <label asp-for="LatestPickUpTime"></label>
         <div><span asp-validation-for="LatestPickUpTime" class="text-danger"></span></div>
-        <input asp-for="LatestPickUpTime" class="form-control" value="@Model.LatestPickUpTime" />
+        <input asp-for="LatestPickUpTime" class="form-control" value="@Model.LatestPickUpTime!.Value.ToString("yyyy-MM-ddTHH:mm:ss")" />
     </div>
     <div class="form-group">
         <label asp-for="Price"></label>
@@ -54,6 +54,9 @@
             <option>Selecteer</option>
         </select>
     </div>
+    
+    @Html.Hidden("PackageId")
+    
     <button class="btn btn-primary" style="margin-top:15px;" type="submit">Pakket bewerken</button>
     </div>
 </form>

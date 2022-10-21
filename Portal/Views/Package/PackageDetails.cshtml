@@ -28,6 +28,13 @@
         <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
         <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
         <p>Type maaltijd: @Model.Package!.MealType</p>
+        <p>Bevat alcohol: 
+            @if(Model.Package.IsAdult!.Value) {
+                <text>Ja</text>
+            } else {
+                <text>Nee</text>
+            }
+        </p>
     </div>
 
     <div class="--detail-product-list col-sm-12 col-md-4">
@@ -50,12 +57,19 @@
         <div class="col-sm-12 col-md-6 float-right">
             @if (role == "Student" && @Model.Package!.ReservedBy == null)
             {
-                <a class="--main-btn" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Reservereen</a>
+                <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                    <button class="--main-btn" type="submit">Reserveer pakket</button>
+                </form>
             }
             else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
             {
-                    <a asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Bewerken</a>
-                <button class="--main-btn" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">Verwijderen</button>
+                <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                    <button class="--main-btn" type="submit">Bewerk pakket</button>
+                </form>
+
+                <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                    <button class="--main-btn">Verwijder pakket</button>
+                </form>
             }
         </div>
     </div>
