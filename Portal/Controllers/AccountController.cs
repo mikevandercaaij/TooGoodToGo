@@ -1,11 +1,4 @@
-﻿using Core.DomainServices.Services.Impl;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Portal.Models;
-using Core.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-using Core.DomainServices.Services.Intf;
+﻿using System.Text.RegularExpressions;
 
 namespace Portal.Controllers
 {
@@ -49,7 +42,8 @@ namespace Portal.Controllers
                     if ((await _signInManager.PasswordSignInAsync(user, LoginModel.Password, false, false)).Succeeded)
                     {
                         return Redirect(LoginModel?.ReturnUrl ?? "/");
-                    } else
+                    }
+                    else
                     {
                         ModelState.AddModelError(nameof(LoginModel.Password), "Het ingevulde wachtwoord is incorrect!");
                     }
@@ -77,7 +71,30 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterStudent(StudentRegisterModel studentModel)
         {
-            if(!ModelState.IsValid)
+            if (studentModel.StudentNumber != null)
+            {
+                var existingUser = await _userManager.FindByNameAsync(studentModel.StudentNumber);
+
+                if (existingUser != null)
+                {
+                    ModelState["StudentNumber"]?.Errors.Add("Er bestaat al een account met dit studentennummer!");
+                }
+            }
+
+            if (studentModel.DateOfBirth != null && studentModel.DateOfBirth!.Value.AddYears(16) > DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(studentModel.DateOfBirth), "Je moet minimaal 16 jaar zijn om te registeren als student!");
+            }
+
+            if (studentModel.Password != null)
+            {
+                if (!PasswordValidation(studentModel.Password))
+                {
+                    ModelState["Password"]?.Errors.Add("Het wachtwoord moet minimaal bestaan uit 8 karakters, 1 hoofdletter en 1 getal!");
+                }
+            }
+            
+            if (!ModelState.IsValid)
             {
                 if (ModelState["StudyCity"]?.Errors.Count > 0)
                 {
@@ -114,11 +131,7 @@ namespace Portal.Controllers
                 await _signInManager.PasswordSignInAsync(user, studentModel.Password, false, false);
                 return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                ModelState["StudentNumber"]?.Errors.Add("Er bestaat al een account met dit studentennummer!");
-                return View(studentModel);
-            }
+            return View(studentModel);
         }
 
         public IActionResult RegisterCanteenEmployee()
@@ -132,6 +145,26 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterCanteenEmployee(CanteenEmployeeRegisterModel canteenEmployeeModel)
         {
+
+            if (canteenEmployeeModel.EmployeeId != null)
+            {
+                var existingUser = await _userManager.FindByNameAsync(canteenEmployeeModel.EmployeeId);
+
+                if (existingUser != null)
+                {
+                    ModelState["EmployeeId"]?.Errors.Add("Er bestaat al een account met dit personeelsnummer!");
+                }
+            }
+
+
+            if (canteenEmployeeModel.Password != null)
+            {
+                if (!PasswordValidation(canteenEmployeeModel.Password))
+                {
+                    ModelState["Password"]?.Errors.Add("Het wachtwoord moet minimaal bestaan uit 8 karakters, 1 hoofdletter en 1 getal!");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
 
@@ -166,12 +199,17 @@ namespace Portal.Controllers
                 await _canteenEmployeeService.AddCanteenEmployeeAsync(CanteenEmployee);
                 await _signInManager.PasswordSignInAsync(user, canteenEmployeeModel.Password, false, false);
                 return RedirectToAction("Index", "Home");
-            } 
-            else
-            {
-                ModelState["EmployeeId"]?.Errors.Add("Er bestaat al een account met dit personeelsnummer!");
-                return View(canteenEmployeeModel);
             }
+            return View(canteenEmployeeModel);
+        }
+
+        public bool PasswordValidation(string password)
+        {
+            var hasNumber = new Regex(@"[0-9]+");
+            var hasUpperChar = new Regex(@"[A-Z]+");
+            var hasMinimum8Chars = new Regex(@".{8,}");
+
+            return hasNumber.IsMatch(password) && hasUpperChar.IsMatch(password) && hasMinimum8Chars.IsMatch(password);
         }
     }
 }

@@ -37,18 +37,34 @@ namespace Core.DomainServices.Services.Impl
                     containsAlcohol = true;
                 }
                 package.Products.Add(product!);
+                product.Packages.Add(package);
             }
 
             package.IsAdult = containsAlcohol;
 
-            foreach (var product in package.Products)
+            await _packageRepository.AddPackageAsync(package);
+        }
+
+        public async Task UpdatePackageAsync(Package package, IList<string> selectedProducts)
+        {
+            bool containsAlcohol = false;
+
+            foreach (string productName in selectedProducts)
             {
+                var product = await _productRepository.GetProductByNameAsync(productName);
+                if (product!.ContainsAlcohol)
+                {
+                    containsAlcohol = true;
+                }
+                package.Products.Add(product!);
                 product.Packages.Add(package);
             }
 
-            await _packageRepository.AddPackageAsync(package);
+            package.IsAdult = containsAlcohol;
+
+            await _packageRepository.UpdatePackageAsync(package);
         }
-        
+
         public async Task DeletePackageAsync(int id)
         {
             await _packageRepository.DeletePackageAsync(id);
@@ -62,12 +78,13 @@ namespace Core.DomainServices.Services.Impl
             return allPackages.Where(p => p.Canteen?.Location == location).OrderBy(p => p.PickUpTime);
         }
 
-        public async Task<Package?> GetPackageByIdAsync(int id) => await _packageRepository.GetPackageByIdAsync(id);
-
-        public async Task UpdatePackageAsync(Package package)
+        public async Task<IEnumerable<Package>> GetAllActivePackagesFromCanteenAsync(CanteenLocationEnum location)
         {
-            await _packageRepository.UpdatePackageAsync(package);
+            var allPackages = await _packageRepository.GetAllPackagesAsync();
+            return allPackages.Where(p => p.Canteen?.Location == location).Where(p => p.PickUpTime > DateTime.Now).Where(p => p.ReservedBy != null).OrderBy(p => p.PickUpTime);
         }
+
+        public async Task<Package?> GetPackageByIdAsync(int id) => await _packageRepository.GetPackageByIdAsync(id);
 
         public async Task ReservePackage(Package package,Student student)
         {
@@ -79,13 +96,19 @@ namespace Core.DomainServices.Services.Impl
         }
         public async Task<IEnumerable<Package>> GetAllOfferedPackagesAsync()
         {
-            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).OrderBy(p => p.PickUpTime);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.PickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
 
         public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
         {
             var student = await _studentRepository.GetStudentByIdAsync(studentNumber);
             return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student).OrderBy(p => p.PickUpTime);
+        }
+
+        public async Task<IEnumerable<Package>> GetAllActiveReservationsFromStudentAsync(string studentNumber)
+        {
+            var student = await _studentRepository.GetStudentByIdAsync(studentNumber);
+            return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == student).Where(p => p.PickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
     }
 }

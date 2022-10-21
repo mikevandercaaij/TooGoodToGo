@@ -7,3 +7,4 @@ global using Core.DomainServices.Services.Intf;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using Portal.Models;
+global using Microsoft.AspNetCore.Identity;
