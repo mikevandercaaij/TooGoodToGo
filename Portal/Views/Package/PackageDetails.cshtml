@@ -1,24 +1,26 @@
 ﻿@model PackageDetailsViewModel
 @{
-    Layout = "_CenteredLayout";
     ViewData["Title"] = Model.Package!.Name;
     var role = this.User.GetRole();
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-    {
-        <div class="alert alert-danger" role="alert">
-            <ul class="mb-0">
-                <li>@error.ErrorMessage</li>
-            </ul>
-        </div>
-    }
-}
-
 <div class="--packageDetailsHolder">
     <div class="row">
+
+        <div class="col-12">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            <li>@error.ErrorMessage</li>
+                        </ul>
+                    </div>
+                }
+            }
+        </div>
+
         <div class="col-12">
             <a class="--prev-route-arrow" onClick="history.go(-1); return false;"><i class="fa-solid fa-arrow-left"></i></a>
         </div>
@@ -30,22 +32,22 @@
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="--detail-package-info">
                 <h1 class="--main-title">@Model.Package!.Name</h1>
-                <p>Prijs: @Model.Package!.Price</p>
+                <p>Prijs: @Model.Package!.GetPrice()</p>
+                <p>Kantine: @Model.Package!.Canteen!.Location</p>
                 <p>Stad: @Model.Package!.Canteen!.City</p>
-                <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
-                <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
-                <p>Type maaltijd: @Model.Package!.MealType</p>
+                <p>Ophaaldatum: @Model.Package!.GetPickupDate()</p>
+                <p>Ophaaltijd: @Model.Package!.GetPickupTime()</p>
+                <p>Uiterlijke ophaaltijd: @Model.Package!.GetLatestPickupTime()</p>
+                <p>Type maaltijd: @Model.Package!.GetMealtypeName()</p>
                 <p>
-                    Bevat alcohol:
-                    @if (Model.Package.IsAdult!.Value)
-                    {
-                        <text>Ja</text>
-                    }
-                    else
-                    {
-                        <text>Nee</text>
-                    }
+                    Bevat alcohol: @Html.Raw(@Model.Package.ContainsAlcohol())
                 </p>
+                <p class="card-text">Gereserveerd: @Html.Raw(@Model.Package.IsReserved())</p>
+
+                @if(Model.Name != null) {
+                    <p>Naam: @Model.Name</p>
+                }
+
                 <p class="--disclaimer-text">Disclaimer: Het is mogelijk dat een aantal van de getoonde producten niet in het pakket zitten.</p>
             </div>
         </div>

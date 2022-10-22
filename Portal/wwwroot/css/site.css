@@ -49,6 +49,22 @@ main {
     color: var(--secondary-color);
 }
 
+.--divider {
+    color:var(--primary-color);
+    height:2px;
+}
+
+.--custom-check {
+    color: green;
+    font-size: 21px;
+    vertical-align: middle;
+}
+
+.--custom-x {
+    color: red;
+    font-size: 21px;
+    vertical-align:middle;
+}
 
 /* Home cards 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -569,16 +585,51 @@ div::-webkit-scrollbar-thumb {
     margin-left:15px;
 }
 
+.--packageDetailsHolder .alert {
+    margin-bottom: 0;
+}
+
 /* OfferedPackages
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-/* Footer
+
+.--packageOverviewHolder {
+    margin:30px;
+}
+
+.--packageOverviewHolder .--package-res {
+    margin: 0 0 15px 0;
+}
+
+.--package-card-img {
+    height:250px;
+    width:auto;
+    object-fit: cover;
+}
+
+.--packageOverviewHolder .card-title {
+    color:var(--primary-color);
+}
+
+.--packageOverviewHolder .card .--main-btn {
+    margin-top:0;
+}
+
+.--packageOverviewHolder .card {
+    border: 2px solid var(--primary-color);
+    border-radius:0;
+}
+
+.--packageOverviewHolder .card-body {
+    border-top: 2px solid var(--primary-color);
+}
+    /* Footer
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-footer {
-    background-color: var(--primary-color);
-    border-bottom: 0.5px solid var(--primary-color)
-}
+    footer {
+        background-color: var(--primary-color);
+        border-bottom: 0.5px solid var(--primary-color)
+    }
 
 .--footer-holder {
     width: 100%;

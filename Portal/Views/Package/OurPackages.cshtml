@@ -5,39 +5,40 @@
 
 @if (Model.Count() > 0)
 {
-    <div class="row">
-        @foreach (Package p in Model)
-        {
-            <div class="col-sm-12 col-md-3">
-                <div class="card">
-                    <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
-                    <div class="card-body">
-                        <h5 class="card-title">@p.Name</h5>
-                        <p class="card-text">Ophaaldatum: @p.GetPickupDate()</p>
-                        <p class="card-text">Ophaaltijd: @p.GetPickupTime()</p>
-                        <p class="card-text">Prijs: @p.GetPrice()</p>
-                        <p class="card-text">Is gereserveerd: @p.IsReserved()</p>
+    <div class="--packageOverviewHolder">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="--main-title">Alle pakketten van jouw kantine</h1>
+                <hr class="--divider"/>
+            </div>
 
-                        <form method="get" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
-                            <button class="--main-btn" type="submit">Bekijk details</button>
-                        </form>
+            @foreach (Package p in Model)
+            {
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 --package-res">
 
-                        <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@p.PackageId">
-                            <button class="--main-btn" type="submit">Bewerk pakket</button>
-                        </form>
+                    <div class="card">
+                        <img class="--package-card-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
+                        <div class="card-body">
+                            <h5 class="card-title">@p.Name</h5>
+                            <p class="card-text">Ophaaldatum: @p.GetPickupDate()</p>
+                            <p class="card-text">Ophaaltijd: @p.GetPickupTime()</p>
+                            <p class="card-text">Prijs: @p.GetPrice()</p>
+                            <p class="card-text">Gereserveerd: @Html.Raw(p.IsReserved())</p>
 
-                        <div class="col-md-12">
-                            <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@p.PackageId">
-                                <button class="--main-btn" type="submit">Verwijder pakket</button>
+                            <form method="get" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
+                                <button class="--main-btn" type="submit">Bekijk details</button>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }
 else
 {
-    <h1>Je kantine heeft nog geen pakketten</h1>
+     <div class="--packageOverviewHolder" style="text-align:center;">
+        <h1 class="--main-title">Jouw kantine heeft nog geen pakketten aangemaakt.</h1>
+        <p>Klik <a class="--text-link" asp-action="CreatePackage">hier</a> om een pakket aan te maken!</p>
+    </div>
 }
