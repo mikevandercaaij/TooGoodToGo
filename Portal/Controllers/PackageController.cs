@@ -131,6 +131,11 @@ namespace Portal.Controllers
                     Package = package,
                 };
 
+                if(package.ReservedBy != null)
+                {
+                    model.Name = package.ReservedBy.FirstName + " " + package.ReservedBy.LastName;
+                }
+
                 if (this.User.GetRole() == "CanteenEmployee")
                 {
                     model.CanteenEmployeeLocation = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;

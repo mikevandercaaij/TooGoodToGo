@@ -1,77 +1,97 @@
 ﻿@model PackageDetailsViewModel
 @{
-    Layout = "_CenteredLayout";
     ViewData["Title"] = Model.Package!.Name;
     var role = this.User.GetRole();
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-    {
-        <div class="alert alert-danger" role="alert">
-            <ul class="mb-0">
-                <li>@error.ErrorMessage</li>
-            </ul>
-        </div>
-    }
-}
+<div class="--packageDetailsHolder">
+    <div class="row">
 
-<div class="row">
-    <div class="col-sm-12 col-md-4">
-        <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(@Model.Package!.Products!.First().Picture!))" alt="@Model.Package!.Products.First().Name" />
-    </div>
-
-    <div class="--detail-package-info col-sm-12 col-md-4">
-        <h1>@Model.Package!.Name</h1>
-        <p>Prijs: @Model.Package!.Price</p>
-        <p>Stad: @Model.Package!.Canteen!.City</p>
-        <p>Ophaaldatum en tijd: @Model.Package!.PickUpTime</p>
-        <p>Uiterlijke ophaaltijd: @Model.Package!.LatestPickUpTime</p>
-        <p>Type maaltijd: @Model.Package!.MealType</p>
-        <p>Bevat alcohol: 
-            @if(Model.Package.IsAdult!.Value) {
-                <text>Ja</text>
-            } else {
-                <text>Nee</text>
-            }
-        </p>
-    </div>
-
-    <div class="--detail-product-list col-sm-12 col-md-4">
-        <h1> Mogelijke inhoud</h1>
-        <ul>
-            @foreach (Product p in Model.Package!.Products)
+        <div class="col-12">
+            @if (!ViewData.ModelState.IsValid)
             {
-                <li>@p.Name</li>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            <li>@error.ErrorMessage</li>
+                        </ul>
+                    </div>
+                }
             }
-        </ul>
-    </div>
-
-
-    <div class="col-sm-12">
-
-        <div class="col-sm-12 col-md-6">
-            <p>Disclaimer: Het is mogelijk dat niet alle producten in het pakket zitten.</p>
         </div>
 
-        <div class="col-sm-12 col-md-6 float-right">
-            @if (role == "Student" && @Model.Package!.ReservedBy == null)
-            {
-                <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                    <button class="--main-btn" type="submit">Reserveer pakket</button>
-                </form>
-            }
-            else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
-            {
-                <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                    <button class="--main-btn" type="submit">Bewerk pakket</button>
-                </form>
+        <div class="col-12">
+            <a class="--prev-route-arrow" onClick="history.go(-1); return false;"><i class="fa-solid fa-arrow-left"></i></a>
+        </div>
 
-                <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                    <button class="--main-btn">Verwijder pakket</button>
-                </form>
-            }
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            
+            <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.Package!.Products!.ElementAt( new Random().Next( Model.Package!.Products.Count())).Picture!))" alt="@Model.Package!.Products.First().Name" />
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="--detail-package-info">
+                <h1 class="--main-title">@Model.Package!.Name</h1>
+                <p>Prijs: @Model.Package!.GetPrice()</p>
+                <p>Kantine: @Model.Package!.Canteen!.Location</p>
+                <p>Stad: @Model.Package!.Canteen!.City</p>
+                <p>Ophaaldatum: @Model.Package!.GetPickupDate()</p>
+                <p>Ophaaltijd: @Model.Package!.GetPickupTime()</p>
+                <p>Uiterlijke ophaaltijd: @Model.Package!.GetLatestPickupTime()</p>
+                <p>Type maaltijd: @Model.Package!.GetMealtypeName()</p>
+                <p>
+                    Bevat alcohol: @Html.Raw(@Model.Package.ContainsAlcohol())
+                </p>
+                <p class="card-text">Gereserveerd: @Html.Raw(@Model.Package.IsReserved())</p>
+
+                @if(Model.Name != null) {
+                    <p>Naam: @Model.Name</p>
+                }
+
+                <p class="--disclaimer-text">Disclaimer: Het is mogelijk dat een aantal van de getoonde producten niet in het pakket zitten.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4 --detail-bottom-res">
+            <div class="--detail-product-list">
+                <h2 class="--main-sub-header"> Mogelijke inhoud:</h2>
+                <ul>
+                    @foreach (Product p in Model.Package!.Products)
+                    {
+                        <li>
+                            @p.Name @if (p.ContainsAlcohol)
+                            {
+                                <text>(bevat alcohol)</text>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+         
+
+        <div class="col-sm-12 col-md-6 col-lg-12 --detail-bottom-res">
+            <div class="--detail-button-holder">
+                @if (role == "Student" && @Model.Package!.ReservedBy == null)
+                {
+                    <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                        <button class="--main-btn --button-res" type="submit">Reserveer pakket</button>
+                    </form>
+                    @*</div>*@
+                }
+                else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
+                {
+                    <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                            <button class="--main-btn --button-res" type="submit">Bewerk pakket</button>
+                    </form>
+
+
+                    <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                        <button class="--main-btn">Verwijder pakket</button>
+                    </form>
+                }
+            </div>
         </div>
     </div>
 </div>

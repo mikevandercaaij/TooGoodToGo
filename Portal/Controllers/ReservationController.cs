@@ -21,17 +21,5 @@ namespace Portal.Controllers
             var reservations = await _packageService.GetAllReservationsFromStudentAsync(this.User.Identity?.Name!);
             return View(reservations);
         }
-
-        [HttpGet]
-        [Authorize(Policy = "Student")]
-        public async Task<IActionResult> ReservationDetails(int id)
-        {
-            var model = new ReservationDetailsViewModel()
-            {
-                Package = await _packageService.GetPackageByIdAsync(id),
-                Student = await _studentService.GetStudentByIdAsync(this.User.Identity?.Name!)
-            };
-            return View(model);
-        }
     }
 }

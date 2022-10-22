@@ -1,5 +1,4 @@
-﻿using Core.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Models
 {
