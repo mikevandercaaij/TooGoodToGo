@@ -1,6 +1,6 @@
 ﻿@model HomeViewModel
 @{
-    
+
     ViewData["Title"] = "Home";
     var role = this.User.GetRole();
 
@@ -8,54 +8,57 @@
 
 @if (role == "Student" || role == "CanteenEmployee")
 {
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Goedemiddag, @Model.Name</h1>
-        </div>
+    <div class="--main-page-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="--main-page-greeting">@DateTime.Now.GetGreetingMessage() @Model.Name</h1>
+            </div>
 
-        <hr />
-
-        @if (role == "Student")
-        {
-            <h2>Al jouw actieve reserveringen:</h2>
-        }
-        else
-        {
-            <h2>Alle actieve reserveringen:</h2>
-        }
-
-
-        @if (Model.Packages.Count() > 0)
-        {
-            @foreach (Package p in Model.Packages)
-            {
-                <div class="card --custom-card col-md-12 col-lg-6">
-                    <a class="--home-card-aTag" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
-                        <div class="card-horizontal">
-                            <div class="img-square-wrapper">
-                                <img class="--home-card-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" alt="Card image cap">
-                            </div>
-                            <div class="card-body --custom-card-body">
-                                <h4 class="card-title">@p.Name</h4>
-                                <p class="card-text">Ophaaldatum en tijd: @p.GetPickupDateAndTime()</p>
-                                <p class="card-text">Prijs: @p.GetPrice()</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            }
-        }
-        else
-        {
             @if (role == "Student")
             {
-                <p>Je hebt momenteel nog niks gereserveerd.</p>
+                <h2 class="--main-page-subtitle">Al jouw actieve reserveringen:</h2>
             }
             else
             {
-                <p>Er zijn momenteel geen reserveringen.</p>
+                <h2 class="--main-page-subtitle">Alle actieve reserveringen:</h2>
             }
-        }
+
+            <hr class="--divider" />
+
+
+            @if (Model.Packages.Count() > 0)
+            {
+                @foreach (Package p in Model.Packages)
+                {
+                    <div class="card --custom-card col-md-12 col-xl-6">
+                        <a class="--home-card-aTag" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
+                            <div class="card-horizontal">
+                                <div class="img-square-wrapper">
+                                    <img class="--home-card-img-overview" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.ElementAt( new Random().Next( p.Products.Count())).Picture!))" alt="@p.Products.First().Name" />
+                                </div>
+                                <div class="card-body --custom-card-body">
+                                    <h4 class="card-title">@p.Name</h4>
+                                    <p class="card-text">Ophaaldatum: @p.GetPickupDate()</p>
+                                    <p class="card-text">Ophaaltijd: @p.GetPickupTime()</p>
+                                    <p class="card-text">Prijs: @p.GetPrice()</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                @if (role == "Student")
+                {
+                    <p>Je hebt momenteel nog niks gereserveerd.</p>
+                }
+                else
+                {
+                    <p>Er zijn momenteel geen reserveringen.</p>
+                }
+            }
+        </div>
     </div>
 }
 else

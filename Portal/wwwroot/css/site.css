@@ -15,7 +15,7 @@ html {
 
 body {
     min-height: calc(100vh - 77px);
-    margin-bottom:77px;
+    margin-bottom: 77px;
 }
 
 /* Custom style */
@@ -41,17 +41,17 @@ main {
 
 .--prev-route-arrow {
     color: var(--primary-color);
-    font-size:36px;
+    font-size: 36px;
 }
 
-.--prev-route-arrow:hover {
-    cursor:pointer;
-    color: var(--secondary-color);
-}
+    .--prev-route-arrow:hover {
+        cursor: pointer;
+        color: var(--secondary-color);
+    }
 
 .--divider {
-    color:var(--primary-color);
-    height:2px;
+    color: var(--primary-color);
+    height: 2px;
 }
 
 .--custom-check {
@@ -63,7 +63,7 @@ main {
 .--custom-x {
     color: red;
     font-size: 21px;
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
 /* Home cards 
@@ -178,14 +178,14 @@ main {
     height: 250px;
 }
 
-    .--home-hero-button button {
-        background-color: var(--beige);
-        margin-bottom: 30px;
-    }
+.--home-hero-button button {
+    background-color: var(--beige);
+    margin-bottom: 30px;
+}
 
-    .--home-hero-button div {
-        width: 100%;
-    }
+.--home-hero-button div {
+    width: 100%;
+}
 
 .--home-hero-button-holder-button {
     height: 200px;
@@ -199,13 +199,43 @@ main {
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
 
+.--main-page-content {
+    margin: 30px;
+}
 
+    .--main-page-content .card-body {
+        border-bottom: 2px solid var(--primary-color);
+        border-right: 2px solid var(--primary-color);
+        border-top: 2px solid var(--primary-color);
+    }
 
+    .--main-page-content .card-title {
+        color: var(--primary-color);
+    }
 
+    .--main-page-content .img-square-wrapper {
+        border: 2px solid var(--primary-color);
+    }
+
+.--home-card-img-overview {
+    object-fit: fill;
+    width: 200px;
+    height: 200px;
+}
+
+.--main-page-greeting {
+    color:var(--primary-color);
+    font-weight:bold;
+
+}
+
+.--main-page-subtitle {
+    color: var(--primary-color);
+    font-size:26px;
+}
 /* Login
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-
 .--login-hero-img {
     padding: 30px 30px 0 30px;
     width: 100%;
@@ -239,14 +269,14 @@ main {
         padding-bottom: 25px;
     }
 
-.--login-form-holder .--main-btn {
-    margin-bottom: 30px;
-}
+    .--login-form-holder .--main-btn {
+        margin-bottom: 30px;
+    }
 
 .--login-form-footer {
-    display:flex;
-    justify-content:space-evenly;
-    align-items:center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 /* Form 
@@ -266,16 +296,16 @@ main {
 
 .--form-title {
     width: 100%;
-text-align:center;
+    text-align: center;
     background-color: var(--primary-color);
     color: var(--beige);
     padding: 30px;
 }
 
-.--form-title p {
-    margin:0;
-    font-size:16px
-}
+    .--form-title p {
+        margin: 0;
+        font-size: 16px
+    }
 
 .--form-holder .form-group {
     padding-bottom: 25px;
@@ -298,9 +328,9 @@ text-align:center;
 }
 
 .--form-footer-text {
-    text-align:center;
-    margin:0;
-    margin-top:30px;
+    text-align: center;
+    margin: 0;
+    margin-top: 30px;
 }
 
 .--form-holder {
@@ -352,7 +382,7 @@ text-align:center;
 }
 
 div::-webkit-scrollbar {
-    -webkit-appearance:none;
+    -webkit-appearance: none;
     width: 8px;
 }
 
@@ -365,19 +395,19 @@ div::-webkit-scrollbar-thumb {
 /* Navbar 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-    nav {
+nav {
     background-color: var(--primary-color);
 }
 
 .navbar-toggler {
     border: none !important;
     color: var(--beige) !important;
-    font-size:28px;
+    font-size: 28px;
 }
 
-.navbar-toggler:focus {
-    box-shadow: none;
-}
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
 
 .navbar-collapse.in {
     background: RGBA(0,0,0,0.85);
@@ -534,12 +564,12 @@ div::-webkit-scrollbar-thumb {
 */
 
 .--packageDetailsHolder {
-    margin:30px;
+    margin: 30px;
 }
 
 .--detail-hero-img, .--detail-package-info, .--detail-product-list {
     border: 3px solid var(--primary-color);
-    height:100%;
+    height: 100%;
 }
 
 .--detail-hero-img {
@@ -549,8 +579,8 @@ div::-webkit-scrollbar-thumb {
 }
 
 .--detail-package-info {
-    background:#FFFFFF;
-    padding:15px;
+    background: #FFFFFF;
+    padding: 15px;
 }
 
 .--detail-product-list {
@@ -561,7 +591,7 @@ div::-webkit-scrollbar-thumb {
 
 .--main-title {
     color: var(--primary-color);
-    font-size: 32px;
+    font-size: 26px;
 }
 
 .--main-sub-header {
@@ -570,20 +600,20 @@ div::-webkit-scrollbar-thumb {
 }
 
 .--disclaimer-text {
-    font-style:italic;
-    color:var(--primary-color);
-    font-size:14px
+    font-style: italic;
+    color: var(--primary-color);
+    font-size: 14px
 }
 
 .--detail-button-holder {
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
-.--detail-button-holder form {
-    margin-left:15px;
-}
+    .--detail-button-holder form {
+        margin-left: 15px;
+    }
 
 .--packageDetailsHolder .alert {
     margin-bottom: 0;
@@ -594,42 +624,42 @@ div::-webkit-scrollbar-thumb {
 */
 
 .--packageOverviewHolder {
-    margin:30px;
+    margin: 30px;
 }
 
-.--packageOverviewHolder .--package-res {
-    margin: 0 0 15px 0;
-}
+    .--packageOverviewHolder .--package-res {
+        margin: 0 0 15px 0;
+    }
 
 .--package-card-img {
-    height:250px;
-    width:auto;
+    height: 250px;
+    width: auto;
     object-fit: cover;
 }
 
 .--packageOverviewHolder .card-title {
-    color:var(--primary-color);
+    color: var(--primary-color);
 }
 
 .--packageOverviewHolder .card .--main-btn {
-    margin-top:0;
+    margin-top: 0;
 }
 
 .--packageOverviewHolder .card {
     border: 2px solid var(--primary-color);
-    border-radius:0;
+    border-radius: 0;
 }
 
 .--packageOverviewHolder .card-body {
     border-top: 2px solid var(--primary-color);
 }
-    /* Footer
+/* Footer
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-    footer {
-        background-color: var(--primary-color);
-        border-bottom: 0.5px solid var(--primary-color)
-    }
+footer {
+    background-color: var(--primary-color);
+    border-bottom: 0.5px solid var(--primary-color)
+}
 
 .--footer-holder {
     width: 100%;
@@ -666,9 +696,9 @@ div::-webkit-scrollbar-thumb {
         width: 100%;
     }
 
-        .--home-hero-button .--main-btn {
-            font-size: 14px;
-        }
+    .--home-hero-button .--main-btn {
+        font-size: 14px;
+    }
 
     .--header-main {
         font-size: 35px;
@@ -679,58 +709,6 @@ div::-webkit-scrollbar-thumb {
         font-size: 25px;
     }
 
-    .--login-img-holder {
-        display:none;
-    }
-
-    .--detail-hero-img {
-        width: 100%;
-        height: 100%;
-    }
-
-    .--detail-package-info {
-        background: #FFFFFF;
-        padding: 15px;
-    }
-
-    .--packageDetailsHolder .col-sm-12 {
-        margin-top: 15px;
-    }
-
-    .--detail-button-holder, .--detail-package-info {
-        margin: 0;
-    }
-
-    .--detail-button-holder form {
-        margin-left: 0;
-    }
-
-
-    .--detail-button-holder {
-        display: block;
-    }
-}
-
-/* Small devices */
-@media (min-width: 576px) and (max-width: 767px) {
-    .--home-hero-button {
-        width: 100%;
-    }
-
-    .--form-holder {
-        width: 100%;
-    }
-        .--home-hero-button .--main-btn {
-            font-size: 18px;
-        }
-
-    .--header-main {
-        font-size: 40px;
-    }
-
-    .--header-sub-main {
-        font-size: 28px;
-    }
     .--login-img-holder {
         display: none;
     }
@@ -757,6 +735,69 @@ div::-webkit-scrollbar-thumb {
             margin-left: 0;
         }
 
+
+    .--detail-button-holder {
+        display: block;
+    }
+
+    .--main-page-content {
+        margin: 0;
+        margin-top: 25px;
+    }
+}
+
+/* Small devices */
+@media (min-width: 576px) and (max-width: 767px) {
+    .--home-hero-button {
+        width: 100%;
+    }
+
+    .--form-holder {
+        width: 100%;
+    }
+
+    .--home-hero-button .--main-btn {
+        font-size: 18px;
+    }
+
+    .--header-main {
+        font-size: 40px;
+    }
+
+    .--header-sub-main {
+        font-size: 28px;
+    }
+
+    .--login-img-holder {
+        display: none;
+    }
+
+    .--detail-hero-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .--detail-package-info {
+        background: #FFFFFF;
+        padding: 15px;
+    }
+
+    .--packageDetailsHolder .col-sm-12 {
+        margin-top: 15px;
+    }
+
+    .--detail-button-holder, .--detail-package-info {
+        margin: 0;
+    }
+
+        .--detail-button-holder form {
+            margin-left: 0;
+        }
+
+    .--main-page-content {
+        margin: 0;
+        margin-top: 25px;
+    }
 
     .--detail-button-holder {
         display: block;
@@ -773,9 +814,9 @@ div::-webkit-scrollbar-thumb {
         width: 100%;
     }
 
-        .--home-hero-button .--main-btn {
-            font-size: 12px;
-        }
+    .--home-hero-button .--main-btn {
+        font-size: 12px;
+    }
 
     .--header-main {
         font-size: 38px;
@@ -784,6 +825,7 @@ div::-webkit-scrollbar-thumb {
     .--header-sub-main {
         font-size: 34px;
     }
+
     .--login-img-holder {
         display: none;
     }
@@ -793,11 +835,11 @@ div::-webkit-scrollbar-thumb {
     }
 
     .--button-res {
-        margin-top:0;
+        margin-top: 0;
     }
 
     .--detail-button-holder {
-        display:block;
+        display: block;
     }
 
         .--detail-button-holder form {
@@ -806,6 +848,11 @@ div::-webkit-scrollbar-thumb {
 
     .--detail-hero-img {
         object-fit: cover;
+    }
+
+    .--main-page-content {
+        margin: 0;
+        margin-top: 25px;
     }
 }
 
@@ -819,9 +866,9 @@ div::-webkit-scrollbar-thumb {
         width: 80%;
     }
 
-        .--home-hero-button .--main-btn {
-            font-size: 15px;
-        }
+    .--home-hero-button .--main-btn {
+        font-size: 15px;
+    }
 
     .--header-main {
         font-size: 50px;
@@ -835,10 +882,9 @@ div::-webkit-scrollbar-thumb {
         object-fit: cover;
     }
 
-   .--packageDetailsHolder p {
-       font-size: 15px;
-   }
-
+    .--packageDetailsHolder p {
+        font-size: 15px;
+    }
 }
 
 /* Extra large devices */

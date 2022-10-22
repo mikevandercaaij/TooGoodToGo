@@ -26,7 +26,8 @@
         </div>
 
         <div class="col-sm-12 col-md-6 col-lg-4">
-            <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(@Model.Package!.Products!.First().Picture!))" alt="@Model.Package!.Products.First().Name" />
+            
+            <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.Package!.Products!.ElementAt( new Random().Next( Model.Package!.Products.Count())).Picture!))" alt="@Model.Package!.Products.First().Name" />
         </div>
 
         <div class="col-sm-12 col-md-6 col-lg-4">

@@ -17,7 +17,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 --package-res">
 
                     <div class="card">
-                        <img class="--package-card-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.First().Picture!))" alt="@p.Products.First().Name" />
+                        <img class="--package-card-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(p.Products!.ElementAt( new Random().Next( p.Products.Count())).Picture!))" alt="@p.Products.First().Name" />
                         <div class="card-body">
                             <h5 class="card-title">@p.Name</h5>
                             <p class="card-text">Ophaaldatum: @p.GetPickupDate()</p>
