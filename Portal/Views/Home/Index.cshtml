@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Package>
+﻿@model HomeViewModel
 @{
+    
     ViewData["Title"] = "Home";
     var role = this.User.GetRole();
 
@@ -7,30 +8,28 @@
 
 @if (role == "Student" || role == "CanteenEmployee")
 {
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Goedemiddag, @Model.Name</h1>
+        </div>
 
-    <div class="col-md-12">
-        <h1>Goedemiddag, Naam</h1>
-    </div>
+        <hr />
 
-    <hr />
-
-    @if (role == "Student")
-    {
-        <h2>Al jouw actieve reserveringen:</h2>
-
-    }
-    else
-    {
-        <h2>Alle actieve reserveringen:</h2>
-    }
+        @if (role == "Student")
+        {
+            <h2>Al jouw actieve reserveringen:</h2>
+        }
+        else
+        {
+            <h2>Alle actieve reserveringen:</h2>
+        }
 
 
-    @if (Model.Count() > 0)
-    {
-        <div class="row">
-            @foreach (Package p in Model)
+        @if (Model.Packages.Count() > 0)
+        {
+            @foreach (Package p in Model.Packages)
             {
-                <div class="card --custom-card col-sm-12 col-md-6">
+                <div class="card --custom-card col-md-12 col-lg-6">
                     <a class="--home-card-aTag" asp-action="PackageDetails" asp-controller="Package" asp-route-id="@p.PackageId">
                         <div class="card-horizontal">
                             <div class="img-square-wrapper">
@@ -45,22 +44,24 @@
                     </a>
                 </div>
             }
-        </div>
-    }
-    else
-    {
-        @if (role == "Student")
-        {
-            <p>Je hebt momenteel nog niks gereserveerd.</p>
         }
         else
         {
-            <p>Er zijn momenteel geen reserveringen.</p>
+            @if (role == "Student")
+            {
+                <p>Je hebt momenteel nog niks gereserveerd.</p>
+            }
+            else
+            {
+                <p>Er zijn momenteel geen reserveringen.</p>
+            }
         }
-    }
+    </div>
 }
 else
 {
+    Layout = "_CenteredLayout";
+
     <section class="text-center">
         <h1 class="--header-main --home-hero-section">Welkom op Avans Too Good To Go</h1>
         <h2 class="--header-sub-main">Maak snel een account aan!</h2>
@@ -71,14 +72,14 @@ else
                 <div class="col-sm-12 col-md-6 half-hero-card left-hero-card">
                     <div class="--home-hero-button">
                         <a asp-action="RegisterStudent" asp-controller="Account">
-                        <div>
-                            <img src="~/img/studentHeroImg.svg" class="--hero-img" />
-                        </div>
-                        <div class="--home-hero-button-holder-button">
-                            <form method="get" asp-action="RegisterStudent" asp-controller="Account">
-                                <button class="--main-btn">Student</button>
-                            </form>
-                        </div>
+                            <div>
+                                <img src="~/img/studentHeroImg.svg" class="--hero-img" />
+                            </div>
+                            <div class="--home-hero-button-holder-button">
+                                <form method="get" asp-action="RegisterStudent" asp-controller="Account">
+                                    <button class="--main-btn">Student</button>
+                                </form>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -86,14 +87,14 @@ else
                 <div class="col-sm-12 col-md-6 half-hero-card right-hero-card">
                     <div class="--home-hero-button">
                         <a asp-action="RegisterCanteenEmployee" asp-controller="Account">
-                        <div>
+                            <div>
                                 <img src="~/img/canteenEmployeeHeroImg.svg" class="--hero-img" />
-                        </div>
-                        <div class="--home-hero-button-holder-button">
-                            <form method="get" asp-action="RegisterCanteenEmployee" asp-controller="Account">
-                                <button class="--main-btn">Kantinemedewerker</button>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="--home-hero-button-holder-button">
+                                <form method="get" asp-action="RegisterCanteenEmployee" asp-controller="Account">
+                                    <button class="--main-btn">Kantinemedewerker</button>
+                                </form>
+                            </div>
                         </a>
                     </div>
                 </div>

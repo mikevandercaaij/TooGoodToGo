@@ -39,5 +39,6 @@ namespace Portal.Models
         public MealtypeEnum? MealType { get; set; }
 
         public Student? ReservedBy { get; set; }
+
     }
 }
