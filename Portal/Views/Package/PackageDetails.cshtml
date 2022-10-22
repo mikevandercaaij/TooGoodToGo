@@ -1,5 +1,6 @@
 ﻿@model PackageDetailsViewModel
 @{
+    Layout = "_CenteredLayout";
     ViewData["Title"] = Model.Package!.Name;
     var role = this.User.GetRole();
 }
