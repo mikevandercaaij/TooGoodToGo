@@ -158,11 +158,11 @@ namespace Portal.Controllers
         {
             var package = await _packageService.GetPackageByIdAsync(id);
 
-            if(package != null)
+            if (package != null)
             {
                 bool isOurPackage = await IsOurCanteensPackage(package);
 
-                if(isOurPackage)
+                if (isOurPackage)
                 {
                     if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
                     {
@@ -180,9 +180,9 @@ namespace Portal.Controllers
 
                         var _selectedProducts = new List<string>();
 
-                        foreach(Product p in package.Products)
+                        foreach (Product p in package.Products)
                         {
-                            _selectedProducts.Add(p.Name!);  
+                            _selectedProducts.Add(p.Name!);
                         }
 
                         module.SelectedProducts = _selectedProducts;
@@ -193,7 +193,7 @@ namespace Portal.Controllers
                     {
                         ModelState.AddModelError("EditPackage", "De maaltijd is al gereserveerd en mag dan ook niet worden bewerkt!");
                     }
-                } 
+                }
                 else
                 {
                     ModelState.AddModelError("EditPackage", "Het is niet toegestaan om pakketten van andere kantines te bewerken!");
@@ -210,7 +210,7 @@ namespace Portal.Controllers
 
         [HttpPost]
         [Authorize(Policy = "CanteenEmployee")]
-        public async Task<IActionResult> EditPackage(int id, PackageModel packageModel)
+        public async Task<IActionResult> EditPackage(PackageModel packageModel)
         {
             if (ModelState["Mealtype"]?.Errors.Count > 0)
             {
@@ -270,9 +270,9 @@ namespace Portal.Controllers
                 return View(packageModel);
             }
 
-            
-            Package package = (await _packageService.GetPackageByIdAsync(id))!;
-            
+
+            Package package = (await _packageService.GetPackageByIdAsync((int)packageModel.PackageId!))!;
+
             package.Name = packageModel.Name;
             package.PickUpTime = packageModel.PickUpTime;
             package.LatestPickUpTime = packageModel.LatestPickUpTime;
@@ -281,7 +281,7 @@ namespace Portal.Controllers
             package.Products = new List<Product>();
 
             await _packageService.UpdatePackageAsync(package, packageModel.SelectedProducts!);
-            return RedirectToAction("PackageDetails", new { id });
+            return RedirectToAction("PackageDetails", new { id = (int)packageModel.PackageId! });
         }
 
         [HttpPost]
@@ -342,13 +342,13 @@ namespace Portal.Controllers
 
                         foreach (Package p in packages)
                         {
-                            if(p.PickUpTime!.Value.Date == package.PickUpTime.Value.Date)
+                            if (p.PickUpTime!.Value.Date == package.PickUpTime.Value.Date)
                             {
                                 alreadyReserved = true;
                             }
                         }
 
-                        if(!alreadyReserved)
+                        if (!alreadyReserved)
                         {
                             await _packageService.ReservePackage(package!, student);
                             return RedirectToAction("StudentReservations", "Reservation");
@@ -382,9 +382,9 @@ namespace Portal.Controllers
         {
             var canteenEmployee = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
 
-            if(canteenEmployee != null)
+            if (canteenEmployee != null)
             {
-                if(canteenEmployee.Location == package.Canteen!.Location)
+                if (canteenEmployee.Location == package.Canteen!.Location)
                 {
                     return true;
                 }
