@@ -39,10 +39,20 @@ main {
     justify-content: center;
 }
 
+.--prev-route-arrow {
+    color: var(--primary-color);
+    font-size:36px;
+}
+
+.--prev-route-arrow:hover {
+    cursor:pointer;
+    color: var(--secondary-color);
+}
+
+
 /* Home cards 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
-
 .--custom-card {
     background-color: transparent;
     border: none;
@@ -168,6 +178,14 @@ main {
     align-items: end;
 }
 
+
+/* Home (package overview)
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
+
+
+
+
 /* Login
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
@@ -274,6 +292,13 @@ text-align:center;
     margin: 30px 0 30px 0;
 }
 
+.--checkbox-holder {
+    overflow-y: scroll;
+    height: 150px;
+    margin-bottom: 15px;
+    border: 2px solid var(--primary-color);
+}
+
 .checkbox {
     position: relative;
     display: block;
@@ -309,7 +334,16 @@ text-align:center;
 .check:checked + label svg g path {
     stroke-dashoffset: 0;
 }
- 
+
+div::-webkit-scrollbar {
+    -webkit-appearance:none;
+    width: 8px;
+}
+
+div::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5)
+}
 
 
 /* Navbar 
@@ -441,8 +475,6 @@ text-align:center;
         transform: rotate(-135deg);
     }
 
-    /* Icon 3*/
-
     .animated-icon2 span:nth-child(1) {
         top: 0px;
     }
@@ -485,13 +517,61 @@ text-align:center;
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
 
-.--detail-hero-img {
-    object-fit: contain;
-    width: 100%;
-    height: 400px;
+.--packageDetailsHolder {
+    margin:30px;
 }
 
+.--detail-hero-img, .--detail-package-info, .--detail-product-list {
+    border: 3px solid var(--primary-color);
+    height:100%;
+}
 
+.--detail-hero-img {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+}
+
+.--detail-package-info {
+    background:#FFFFFF;
+    padding:15px;
+}
+
+.--detail-product-list {
+    background: #FFFFFF;
+    border: 3px solid var(--primary-color);
+    padding: 10px;
+}
+
+.--main-title {
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+.--main-sub-header {
+    font-size: 26px;
+    color: var(--primary-color);
+}
+
+.--disclaimer-text {
+    font-style:italic;
+    color:var(--primary-color);
+    font-size:14px
+}
+
+.--detail-button-holder {
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+}
+
+.--detail-button-holder form {
+    margin-left:15px;
+}
+
+/* OfferedPackages
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
 /* Footer
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
@@ -552,6 +632,32 @@ footer {
         display:none;
     }
 
+    .--detail-hero-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .--detail-package-info {
+        background: #FFFFFF;
+        padding: 15px;
+    }
+
+    .--packageDetailsHolder .col-sm-12 {
+        margin-top: 15px;
+    }
+
+    .--detail-button-holder, .--detail-package-info {
+        margin: 0;
+    }
+
+    .--detail-button-holder form {
+        margin-left: 0;
+    }
+
+
+    .--detail-button-holder {
+        display: block;
+    }
 }
 
 /* Small devices */
@@ -576,6 +682,33 @@ footer {
     }
     .--login-img-holder {
         display: none;
+    }
+
+    .--detail-hero-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .--detail-package-info {
+        background: #FFFFFF;
+        padding: 15px;
+    }
+
+    .--packageDetailsHolder .col-sm-12 {
+        margin-top: 15px;
+    }
+
+    .--detail-button-holder, .--detail-package-info {
+        margin: 0;
+    }
+
+        .--detail-button-holder form {
+            margin-left: 0;
+        }
+
+
+    .--detail-button-holder {
+        display: block;
     }
 }
 
@@ -603,6 +736,26 @@ footer {
     .--login-img-holder {
         display: none;
     }
+
+    .--detail-bottom-res {
+        margin: 24px 0;
+    }
+
+    .--button-res {
+        margin-top:0;
+    }
+
+    .--detail-button-holder {
+        display:block;
+    }
+
+        .--detail-button-holder form {
+            margin-left: 0;
+        }
+
+    .--detail-hero-img {
+        object-fit: cover;
+    }
 }
 
 /* Large devices */
@@ -626,6 +779,15 @@ footer {
     .--header-sub-main {
         font-size: 36px;
     }
+
+    .--detail-hero-img {
+        object-fit: cover;
+    }
+
+   .--packageDetailsHolder p {
+       font-size: 15px;
+   }
+
 }
 
 /* Extra large devices */
