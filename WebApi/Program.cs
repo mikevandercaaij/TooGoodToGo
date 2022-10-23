@@ -1,9 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Infrastructure.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +27,10 @@ builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.Authenticati
     options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["BearerTokens:Key"]));
 });
 
+builder.Services.AddTransient<PackageRepository>();
+
+builder.Services.AddGraphQLServer().RegisterService<PackageRepository>().AddQueryType<Query>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGraphQL();
 
 app.UseHttpsRedirection();
 

@@ -1,0 +1,16 @@
+﻿global using Core.DomainServices.Services.Intf;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Identity;
+global using System.Text;
+global using WebApi.Models;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Infrastructure.Contexts;
+global using Core.Domain.Entities;
+global using Microsoft.EntityFrameworkCore;
+global using WebApi.GraphQL;
+global using Infrastructure.Repos.Impl;
+global using Core.DomainServices.Repos.Intf;
+global using Core.DomainServices.Services.Impl;

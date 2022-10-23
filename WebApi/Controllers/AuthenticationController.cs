@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using WebApi.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-
-
+﻿
 namespace WebApi.Controllers
 {
     public class AuthenticationController : ControllerBase
