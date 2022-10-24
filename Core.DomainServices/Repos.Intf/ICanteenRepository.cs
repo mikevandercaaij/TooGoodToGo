@@ -6,6 +6,5 @@ namespace Core.DomainServices.Repos.Intf
     {
         Task<IEnumerable<Canteen>> GetAllCanteensAsync();
         Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum id);
-
     }
 }

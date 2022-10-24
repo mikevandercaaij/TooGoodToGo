@@ -69,7 +69,7 @@
                 <label asp-for="MealType"></label>
                 <div><span asp-validation-for="MealType" class="text-danger"></span></div>
                 <select asp-for="MealType" class="form-control --input" asp-items="Html.GetEnumSelectList<MealtypeEnum>()">
-                    <option>Selecteer</option>
+                    <option selected disabled>Selecteer</option>
                 </select>
             </div>
             <button class="--main-btn" style="margin-top:15px;" type="submit">Pakket aanmaken</button>

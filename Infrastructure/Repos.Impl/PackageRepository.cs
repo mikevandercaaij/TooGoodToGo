@@ -1,7 +1,4 @@
-﻿using Core.DomainServices.Repos.Intf;
-using Infrastructure.Contexts;
-
-namespace Infrastructure.Repos.Impl
+﻿namespace Infrastructure.Repos.Impl
 {
     public class PackageRepository : IPackageRepository
     {
@@ -11,14 +8,15 @@ namespace Infrastructure.Repos.Impl
         {
             _context = context;
         }
-        public async Task<Package?> GetPackageByIdAsync(int id) {
-            
+
+        public async Task<Package> GetPackageByIdAsync(int id) {
+
             return await _context.Packages
                 .Where(p => p.PackageId == id)
                 .Include(p => p.Products)
                 .Include(p => p.Canteen)
                 .Include(p => p.ReservedBy)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? null!;
         }
 
         public async Task<IEnumerable<Package>> GetAllPackagesAsync() {
