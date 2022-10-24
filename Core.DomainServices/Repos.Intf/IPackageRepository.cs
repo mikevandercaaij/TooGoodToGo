@@ -3,7 +3,7 @@
     public interface IPackageRepository
     {
         Task<IEnumerable<Package>> GetAllPackagesAsync();
-        Task<Package?> GetPackageByIdAsync(int id);
+        Task<Package> GetPackageByIdAsync(int id);
         Task AddPackageAsync(Package package);
         Task UpdatePackageAsync(Package package);
         Task DeletePackageAsync(int id);

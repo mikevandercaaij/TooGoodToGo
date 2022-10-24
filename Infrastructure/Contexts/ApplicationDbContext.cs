@@ -1,7 +1,4 @@
-﻿
-using Core.Domain.Entities;
-using System.Net;
-using System.Xml.Linq;
+﻿using System.Net;
 
 namespace Infrastructure.Contexts
 {

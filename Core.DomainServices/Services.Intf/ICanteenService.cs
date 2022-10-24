@@ -1,6 +1,4 @@
-﻿using Core.Domain.Enums;
-
-namespace Core.DomainServices.Services.Intf
+﻿namespace Core.DomainServices.Services.Intf
 {
     public interface ICanteenService
     {

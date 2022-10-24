@@ -1,7 +1,4 @@
-﻿
-using Core.Domain.Entities;
-
-namespace Portal.Controllers
+﻿namespace Portal.Controllers
 {
     public class HomeController : Controller
     {
