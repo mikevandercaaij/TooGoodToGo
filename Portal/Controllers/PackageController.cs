@@ -1,26 +1,16 @@
-﻿
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Portal.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace Portal.Controllers
+﻿namespace Portal.Controllers
 {
     public class PackageController : Controller
     {
         private readonly IPackageService _packageService;
         private readonly IProductService _productService;
         private readonly ICanteenEmployeeService _canteenEmployeeService;
-        private readonly ICanteenService _canteenService;
-        private readonly IStudentService _studentService;
 
-        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService, IStudentService studentService, ICanteenService canteenService)
+        public PackageController(IPackageService packageService, IProductService productService, ICanteenEmployeeService canteenEmployeeService)
         {
             _packageService = packageService;
             _productService = productService;
             _canteenEmployeeService = canteenEmployeeService;
-            _studentService = studentService;
-            _canteenService = canteenService;
         }
 
         [HttpGet]
@@ -39,6 +29,7 @@ namespace Portal.Controllers
             {
                 AvailableProducts = await _productService.GetAllSelectListItems()
             };
+
             return View(model);
         }
 
@@ -46,76 +37,47 @@ namespace Portal.Controllers
         [Authorize(Policy = "CanteenEmployee")]
         public async Task<IActionResult> CreatePackage(PackageModel packageModel)
         {
-            if (ModelState["Mealtype"]?.Errors.Count > 0)
+            try
             {
-                ModelState["Mealtype"]?.Errors.Clear();
-                ModelState["Mealtype"]?.Errors.Add("Selecteer een type maaltijd!");
-            }
-
-            if (!(ModelState["Mealtype"]?.Errors.Count > 0))
-            {
-                var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
-
-                if (user != null)
+                var package = new Package()
                 {
-                    var canteen = await _canteenService.GetCanteenByLocationAsync(user.Location!.Value);
+                    Name = packageModel.Name,
+                    PickUpTime = packageModel.PickUpTime,
+                    LatestPickUpTime = packageModel.LatestPickUpTime,
+                    Price = packageModel.Price,
+                    MealType = packageModel.MealType
+                };
 
-                    if (canteen != null)
-                    {
-                        if (!canteen.ServesWarmMeals!.Value && packageModel.MealType == MealtypeEnum.WarmDinner)
-                        {
-                            ModelState["Mealtype"]?.Errors.Clear();
-                            ModelState["Mealtype"]?.Errors.Add("Jouw kantine serveert geen warme maaltijden!");
-                        }
-                    }
-                }
+                await _packageService.AddPackageAsync(package, packageModel.SelectedProducts!, this.User.Identity?.Name!);
+
+                if (ModelState.IsValid)
+                    return RedirectToAction("OurPackages", "Package");
+
+                throw new Exception();
             }
-
-            if (packageModel.PickUpTime < DateTime.Now)
+            catch (Exception e)
             {
-                ModelState.AddModelError("PickUpTime", "De afhaaltijd moet in de toekomst liggen!");
-            }
+                if (e.Message == "Selecteer minimaal één product!")
+                    ModelState.AddModelError("Products", e.Message);
 
-            if (packageModel.PickUpTime.HasValue)
-            {
-                if (packageModel.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
-                {
-                    ModelState.AddModelError("PickUpTime", "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
-                }
-            }
+                if (e.Message == "De afhaaltijd moet in de toekomst liggen!")
+                    ModelState.AddModelError("PickUpTime", e.Message);
 
-            if (packageModel.LatestPickUpTime < DateTime.Now)
-            {
-                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet in de toekomst liggen!");
-            }
-            else if (packageModel.LatestPickUpTime <= packageModel.PickUpTime)
-            {
-                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!");
-            }
+                if (e.Message == "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
+                    ModelState.AddModelError("PickUpTime", e.Message);
 
-            if (packageModel.SelectedProducts?.Count == 0)
-            {
-                ModelState.AddModelError("Products", "Selecter minimaal één product!");
-            }
+                if (e.Message == "De uiterlijke afhaaltijd moet in de toekomst liggen!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
 
+                if (e.Message == "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
 
-            if (!ModelState.IsValid)
-            {
+                if (e.Message == "Jouw kantine serveert geen warme maaltijden!")
+                    ModelState.AddModelError("MealType", e.Message);
+
                 packageModel.AvailableProducts = await _productService.GetAllSelectListItems();
                 return View(packageModel);
             }
-
-            var package = new Package()
-            {
-                Name = packageModel.Name,
-                PickUpTime = packageModel.PickUpTime,
-                LatestPickUpTime = packageModel.LatestPickUpTime,
-                Price = packageModel.Price,
-                MealType = packageModel.MealType,
-            };
-
-            await _packageService.AddPackageAsync(package, packageModel.SelectedProducts!, this.User.Identity!.Name!);
-            return RedirectToAction("OurPackages", "Package");
         }
 
         [HttpGet]
@@ -131,20 +93,142 @@ namespace Portal.Controllers
                     Package = package,
                 };
 
-                if(package.ReservedBy != null)
-                {
+                if (package.ReservedBy != null)
                     model.Name = package.ReservedBy.FirstName + " " + package.ReservedBy.LastName;
-                }
+
 
                 if (this.User.GetRole() == "CanteenEmployee")
-                {
-                    model.CanteenEmployeeLocation = _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location;
-                }
+                    model.CanteenEmployeeLocation = (CanteenLocationEnum)_canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity!.Name!).Result?.Location!;
 
                 return View(model);
             }
+            else
+                return RedirectToAction("Index", "Home");
+        }
 
-            return RedirectToAction("Index");
+        [HttpGet]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> EditPackage(int id)
+        {
+            try
+            {
+                await _packageService.ValidateGetUpdatePackage(id, this.User.Identity?.Name!);
+
+                if (ModelState.IsValid)
+                    return View(ViewModelHelper.GetPackageViewModel(await _packageService.GetPackageByIdAsync(id), await _productService.GetAllSelectListItems()));
+
+                throw new Exception();
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "De maaltijd is al gereserveerd en mag dan ook niet worden bewerkt!")
+                    ModelState.AddModelError("AlreadyResered", e.Message);
+
+                if (e.Message == "Het is niet toegestaan om pakketten van andere kantines te bewerken!")
+                    ModelState.AddModelError("NotAllowed", e.Message);
+
+                var package = await _packageService.GetPackageByIdAsync(id);
+                return View("PackageDetails", ViewModelHelper.GetPackageDetailsViewModel(package, (CanteenLocationEnum)package.Canteen?.Location!));
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> EditPackage(PackageModel packageModel)
+        {
+            try
+            {
+                Package package = (await _packageService.GetPackageByIdAsync((int)packageModel.PackageId!))!;
+
+                package.Name = packageModel.Name;
+                package.PickUpTime = packageModel.PickUpTime;
+                package.LatestPickUpTime = packageModel.LatestPickUpTime;
+                package.Price = packageModel.Price;
+                package.MealType = packageModel.MealType;
+                package.Products = new List<Product>();
+
+                await _packageService.UpdatePackageAsync(package, packageModel.SelectedProducts!, this.User.Identity?.Name!);
+                return RedirectToAction("PackageDetails", new { id = (int)packageModel.PackageId! });
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Selecteer minimaal één product!")
+                    ModelState.AddModelError("Products", e.Message);
+
+                if (e.Message == "De afhaaltijd moet in de toekomst liggen!")
+                    ModelState.AddModelError("PickUpTime", e.Message);
+
+                if (e.Message == "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
+                    ModelState.AddModelError("PickUpTime", e.Message);
+
+                if (e.Message == "De uiterlijke afhaaltijd moet in de toekomst liggen!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
+
+                if (e.Message == "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
+
+                if (e.Message == "Jouw kantine serveert geen warme maaltijden!")
+                    ModelState.AddModelError("MealType", e.Message);
+
+                packageModel.AvailableProducts = await _productService.GetAllSelectListItems();
+                return View(packageModel);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> DeletePackage(int id)
+        {
+            try
+            {
+                await _packageService.DeletePackageAsync(id, this.User.Identity?.Name!);
+
+                if (ModelState.IsValid)
+                    return RedirectToAction("OurPackages");
+
+                throw new Exception("Er is iets fout gegaan bij het verwijderen van het pakket!");
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "De maaltijd is al gereserveerd en mag dan ook niet worden verwijderd!")
+                    ModelState.AddModelError("AlreadyReserved", e.Message);
+
+                if (e.Message == "Het is niet toegestaan om pakketten van andere kantines te verwijderen!")
+                    ModelState.AddModelError("NotAllowedToAlter", e.Message);
+
+                var package = await _packageService.GetPackageByIdAsync(id);
+                return View("PackageDetails", ViewModelHelper.GetPackageDetailsViewModel(package, (CanteenLocationEnum)package.Canteen?.Location!));
+            }
+        }
+
+        [Authorize(Policy = "Student")]
+        public async Task<IActionResult> ReservePackage(int id)
+        {
+            try
+            {
+                await _packageService.ReservePackageAsync(id, this.User.Identity?.Name!);
+
+                if (ModelState.IsValid)
+                {
+                    return RedirectToAction("StudentReservations", "Reservation");
+                }
+
+                throw new Exception();
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Je hebt al een pakket gereserveerd op deze ophaaldag!")
+                    ModelState.AddModelError("AlreadyReservedAPackage", e.Message);
+
+                if (e.Message == "Je bent nog geen 18 jaar oud en mag dus geen pakketten met alcoholische inhoud reserveren!")
+                    ModelState.AddModelError("NotAnAdult", e.Message);
+
+                if (e.Message == "Deze maaltijd is al gereserveerd door iemand anders!")
+                    ModelState.AddModelError("PackageIsAlreadyReserved", e.Message);
+
+                var package = await _packageService.GetPackageByIdAsync(id);
+                return View("PackageDetails", ViewModelHelper.GetPackageDetailsViewModel(package, (CanteenLocationEnum)package.Canteen?.Location!));
+            }
         }
 
         [HttpGet]
@@ -155,246 +239,6 @@ namespace Portal.Controllers
             var packages = await _packageService.GetAllPackagesFromCanteenAsync((CanteenLocationEnum)user?.Location!);
 
             return View(packages);
-        }
-
-        [HttpGet]
-        [Authorize(Policy = "CanteenEmployee")]
-        public async Task<IActionResult> EditPackage(int id)
-        {
-            var package = await _packageService.GetPackageByIdAsync(id);
-
-            if (package != null)
-            {
-                bool isOurPackage = await IsOurCanteensPackage(package);
-
-                if (isOurPackage)
-                {
-                    if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
-                    {
-                        var module = new PackageModel()
-                        {
-                            PackageId = package!.PackageId,
-                            Name = package!.Name,
-                            Products = package!.Products,
-                            PickUpTime = package!.PickUpTime,
-                            LatestPickUpTime = package!.LatestPickUpTime,
-                            Price = package!.Price,
-                            MealType = package!.MealType,
-                            AvailableProducts = await _productService.GetAllSelectListItems(),
-                        };
-
-                        var _selectedProducts = new List<string>();
-
-                        foreach (Product p in package.Products)
-                        {
-                            _selectedProducts.Add(p.Name!);
-                        }
-
-                        module.SelectedProducts = _selectedProducts;
-
-                        return View(module);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("EditPackage", "De maaltijd is al gereserveerd en mag dan ook niet worden bewerkt!");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("EditPackage", "Het is niet toegestaan om pakketten van andere kantines te bewerken!");
-                }
-            }
-
-            var model = new PackageDetailsViewModel
-            {
-                Package = package,
-            };
-
-            return View("PackageDetails", model);
-        }
-
-        [HttpPost]
-        [Authorize(Policy = "CanteenEmployee")]
-        public async Task<IActionResult> EditPackage(PackageModel packageModel)
-        {
-            if (ModelState["Mealtype"]?.Errors.Count > 0)
-            {
-                ModelState["Mealtype"]?.Errors.Clear();
-                ModelState["Mealtype"]?.Errors.Add("Selecteer een type maaltijd!");
-            }
-
-            if (!(ModelState["Mealtype"]?.Errors.Count > 0))
-            {
-                var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
-
-                if (user != null)
-                {
-                    var canteen = await _canteenService.GetCanteenByLocationAsync(user.Location!.Value);
-
-                    if (canteen != null)
-                    {
-                        if (!canteen.ServesWarmMeals!.Value && packageModel.MealType == MealtypeEnum.WarmDinner)
-                        {
-                            ModelState["Mealtype"]?.Errors.Clear();
-                            ModelState["Mealtype"]?.Errors.Add("Jouw kantine serveert geen warme maaltijden!");
-                        }
-                    }
-                }
-            }
-
-            if (packageModel.PickUpTime < DateTime.Now)
-            {
-                ModelState.AddModelError("PickUpTime", "De afhaaltijd moet in de toekomst liggen!");
-            }
-
-            if (packageModel.PickUpTime.HasValue)
-            {
-                if (packageModel.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
-                {
-                    ModelState.AddModelError("PickUpTime", "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
-                }
-            }
-
-            if (packageModel.LatestPickUpTime < DateTime.Now)
-            {
-                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet in de toekomst liggen!");
-            }
-            else if (packageModel.LatestPickUpTime <= packageModel.PickUpTime)
-            {
-                ModelState.AddModelError("LatestPickUpTime", "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!");
-            }
-
-            if (packageModel.SelectedProducts?.Count == 0)
-            {
-                ModelState.AddModelError("Products", "Selecter minimaal één product!");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                packageModel.AvailableProducts = await _productService.GetAllSelectListItems();
-                return View(packageModel);
-            }
-
-
-            Package package = (await _packageService.GetPackageByIdAsync((int)packageModel.PackageId!))!;
-
-            package.Name = packageModel.Name;
-            package.PickUpTime = packageModel.PickUpTime;
-            package.LatestPickUpTime = packageModel.LatestPickUpTime;
-            package.Price = packageModel.Price;
-            package.MealType = packageModel.MealType;
-            package.Products = new List<Product>();
-
-            await _packageService.UpdatePackageAsync(package, packageModel.SelectedProducts!);
-            return RedirectToAction("PackageDetails", new { id = (int)packageModel.PackageId! });
-        }
-
-        [HttpPost]
-        [Authorize(Policy = "CanteenEmployee")]
-        public async Task<IActionResult> DeletePackage(int id)
-        {
-            var package = await _packageService.GetPackageByIdAsync(id);
-
-            if (package != null)
-            {
-                bool isOurPackage = await IsOurCanteensPackage(package);
-
-                if (isOurPackage)
-                {
-                    if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
-                    {
-                        await _packageService.DeletePackageAsync(id);
-                        return RedirectToAction("OurPackages");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("DeletePackage", "De maaltijd is al gereserveerd en mag dan ook niet worden verwijderd!");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("DeletePackage", "Het is niet toegestaan om pakketten van andere kantines te verwijderen!");
-                }
-            }
-
-            var model = new PackageDetailsViewModel
-            {
-                Package = package,
-            };
-
-            return View("PackageDetails", model);
-        }
-
-        [Authorize(Policy = "Student")]
-        public async Task<IActionResult> ReservePackage(int id)
-        {
-            var package = await _packageService.GetPackageByIdAsync(id);
-
-            if (package != null && package?.ReservedBy == null)
-            {
-                var student = await _studentService.GetStudentByIdAsync(this.User.Identity?.Name!);
-
-                if (student != null)
-                {
-                    var studentIsAdult = student.DateOfBirth!.Value.AddYears(18) <= package!.PickUpTime!.Value;
-
-                    if (package!.IsAdult!.Value && studentIsAdult || !(package!.IsAdult!.Value))
-                    {
-
-                        var packages = await _packageService.GetAllReservationsFromStudentAsync(this.User.Identity?.Name!);
-
-                        bool alreadyReserved = false;
-
-                        foreach (Package p in packages)
-                        {
-                            if (p.PickUpTime!.Value.Date == package.PickUpTime.Value.Date)
-                            {
-                                alreadyReserved = true;
-                            }
-                        }
-
-                        if (!alreadyReserved)
-                        {
-                            await _packageService.ReservePackage(package!, student);
-                            return RedirectToAction("StudentReservations", "Reservation");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("Reservation", "Je hebt al een pakket gereserveerd op deze ophaaldag!");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Reservation", "Je bent nog geen 18 jaar oud en mag dus geen pakketten met alcoholische inhoud reserveren!");
-                    }
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("Reservation", "Deze maaltijd is al gereserveerd door iemand anders!");
-            }
-
-
-            var model = new PackageDetailsViewModel
-            {
-                Package = package,
-            };
-
-            return View("PackageDetails", model);
-        }
-
-        public async Task<bool> IsOurCanteensPackage(Package package)
-        {
-            var canteenEmployee = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
-
-            if (canteenEmployee != null)
-            {
-                if (canteenEmployee.Location == package.Canteen!.Location)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

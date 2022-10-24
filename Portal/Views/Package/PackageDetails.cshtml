@@ -6,16 +6,17 @@
 
 <div class="--packageDetailsHolder">
     <div class="row">
-
         <div class="col-12">
             @if (!ViewData.ModelState.IsValid)
             {
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
                     <div class="alert alert-danger" role="alert">
-                        <ul class="mb-0">
-                            <li>@error.ErrorMessage</li>
-                        </ul>
+ 
+                        <p style="margin:0;">
+                       <i class="fa-solid fa-triangle-exclamation" style="margin-right:5px;"></i> 
+                       @error.ErrorMessage
+                        </p>
                     </div>
                 }
             }
@@ -26,7 +27,6 @@
         </div>
 
         <div class="col-sm-12 col-md-6 col-lg-4">
-            
             <img class="--detail-hero-img" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.Package!.Products!.ElementAt( new Random().Next( Model.Package!.Products.Count())).Picture!))" alt="@Model.Package!.Products.First().Name" />
         </div>
 
@@ -38,6 +38,7 @@
                 <p>Stad: @Model.Package!.Canteen!.City</p>
                 <p>Ophaaldatum: @Model.Package!.GetPickupDate()</p>
                 <p>Ophaaltijd: @Model.Package!.GetPickupTime()</p>
+                <p>Uiterlijke ophaaldatum: @Model.Package!.GetLatestPickupDate()</p>
                 <p>Uiterlijke ophaaltijd: @Model.Package!.GetLatestPickupTime()</p>
                 <p>Type maaltijd: @Model.Package!.GetMealtypeName()</p>
                 <p>
@@ -69,7 +70,6 @@
                 </ul>
             </div>
         </div>
-         
 
         <div class="col-sm-12 col-md-6 col-lg-12 --detail-bottom-res">
             <div class="--detail-button-holder">
@@ -78,14 +78,12 @@
                     <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
                         <button class="--main-btn --button-res" type="submit">Reserveer pakket</button>
                     </form>
-                    @*</div>*@
                 }
                 else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
                 {
                     <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
                             <button class="--main-btn --button-res" type="submit">Bewerk pakket</button>
                     </form>
-
 
                     <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
                         <button class="--main-btn">Verwijder pakket</button>

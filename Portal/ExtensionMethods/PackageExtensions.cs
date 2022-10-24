@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
@@ -27,12 +28,12 @@ namespace Portal.ExtensionMethods
         }
 
         public static string GetLatestPickupTime(this Package package) => package.LatestPickUpTime!.Value.ToString("HH:mm");
-
+        public static string GetLatestPickupDate(this Package package) => package.LatestPickUpTime!.Value.ToString("dd-M-yyyy");
         public static string GetPickupDate(this Package package) => package.PickUpTime!.Value.ToString("dd-M-yyyy");
         public static string GetPickupTime(this Package package) => package.PickUpTime!.Value.ToString("HH:mm");
 
         public static string GetPickupDateAndTime(this Package package) => package.PickUpTime!.Value.ToString("dd-M-yyyy HH:mm");
-        public static string GetPrice(this Package package) => $"€ {package.Price}";
+        public static string GetPrice(this Package package) => String.Format("{0:€#,##0.00}", package.Price);
         public static string ContainsAlcohol(this Package package) => package.IsAdult!.Value ? "<i class='fa-solid fa-check --custom-check'></i>" : "<i class='fa-solid fa-xmark --custom-x'></i>";
         public static string IsReserved(this Package package) => package.ReservedBy != null ? "<i class='fa-solid fa-check --custom-check'></i>" : "<i class='fa-solid fa-xmark --custom-x'></i>";
         

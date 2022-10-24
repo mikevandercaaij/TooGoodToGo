@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts
 {
@@ -8,7 +7,6 @@ namespace Infrastructure.Contexts
         public SecurityDbContext(DbContextOptions<SecurityDbContext> options) : base(options)
         {
         }
-        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

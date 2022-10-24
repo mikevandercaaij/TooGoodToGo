@@ -1,6 +1,4 @@
-﻿using Core.Domain.Enums;
-
-namespace Portal.Models
+﻿namespace Portal.Models.HomeModels
 {
     public class HomeViewModel
     {

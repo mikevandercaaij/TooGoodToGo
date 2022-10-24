@@ -1,4 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using Portal.Models.AccountModels;
+using Portal.Models.CanteenModels;
+using Portal.Models.StudentModels;
 
 namespace Portal.Controllers
 {
@@ -40,18 +43,12 @@ namespace Portal.Controllers
                 {
                     await _signInManager.SignOutAsync();
                     if ((await _signInManager.PasswordSignInAsync(user, LoginModel.Password, false, false)).Succeeded)
-                    {
                         return Redirect(LoginModel?.ReturnUrl ?? "/");
-                    }
                     else
-                    {
                         ModelState.AddModelError(nameof(LoginModel.Password), "Het ingevulde wachtwoord is incorrect!");
-                    }
                 }
                 else
-                {
                     ModelState.AddModelError(nameof(LoginModel.Password), "Er bestaat geen gebruiker met deze gegevens!");
-                }
             }
             return View(LoginModel);
         }
@@ -71,29 +68,22 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterStudent(StudentRegisterModel studentModel)
         {
+
             if (studentModel.StudentNumber != null)
             {
                 var existingUser = await _userManager.FindByNameAsync(studentModel.StudentNumber);
 
                 if (existingUser != null)
-                {
                     ModelState["StudentNumber"]?.Errors.Add("Er bestaat al een account met dit studentennummer!");
-                }
             }
 
             if (studentModel.DateOfBirth != null && studentModel.DateOfBirth!.Value.AddYears(16) > DateTime.Now)
-            {
                 ModelState.AddModelError(nameof(studentModel.DateOfBirth), "Je moet minimaal 16 jaar zijn om te registeren als student!");
-            }
 
             if (studentModel.Password != null)
-            {
                 if (!PasswordValidation(studentModel.Password))
-                {
                     ModelState["Password"]?.Errors.Add("Het wachtwoord moet minimaal bestaan uit 8 karakters, 1 hoofdletter en 1 getal!");
-                }
-            }
-            
+
             if (!ModelState.IsValid)
             {
                 if (ModelState["StudyCity"]?.Errors.Count > 0)
@@ -145,24 +135,19 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterCanteenEmployee(CanteenEmployeeRegisterModel canteenEmployeeModel)
         {
-
             if (canteenEmployeeModel.EmployeeId != null)
             {
                 var existingUser = await _userManager.FindByNameAsync(canteenEmployeeModel.EmployeeId);
 
                 if (existingUser != null)
-                {
                     ModelState["EmployeeId"]?.Errors.Add("Er bestaat al een account met dit personeelsnummer!");
-                }
             }
 
 
             if (canteenEmployeeModel.Password != null)
             {
                 if (!PasswordValidation(canteenEmployeeModel.Password))
-                {
                     ModelState["Password"]?.Errors.Add("Het wachtwoord moet minimaal bestaan uit 8 karakters, 1 hoofdletter en 1 getal!");
-                }
             }
 
             if (!ModelState.IsValid)

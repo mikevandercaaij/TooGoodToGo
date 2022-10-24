@@ -1,7 +1,4 @@
-﻿using Core.DomainServices.Repos.Intf;
-using Infrastructure.Contexts;
-
-namespace Infrastructure.Repos.Impl
+﻿namespace Infrastructure.Repos.Impl
 {
     public class CanteenRepository : ICanteenRepository
     {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Core.DomainServices.Services.Intf;
 
 namespace Core.DomainServices.Services.Impl
 {
@@ -11,13 +10,9 @@ namespace Core.DomainServices.Services.Impl
         {
             _productRepository = productRepository;
         }
-
         public async Task<IEnumerable<Product>> GetAllProductsAsync() => await _productRepository.GetAllProductsAsync();
-
         public async Task<Product?> GetProductByIdAsync(int id) => await _productRepository.GetProductByIdAsync(id);
         public async Task<Product?> GetProductByNameAsync(string name) => await _productRepository.GetProductByNameAsync(name);
-
-
         public async Task<IList<SelectListItem>> GetAllSelectListItems()
         {
             List<SelectListItem> productList = new();
@@ -30,6 +25,5 @@ namespace Core.DomainServices.Services.Impl
 
             return productList;
         }
-
     }
 }

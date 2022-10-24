@@ -1,7 +1,7 @@
 ﻿using Core.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Portal.Models
+namespace Portal.Models.CanteenModels
 {
     public class CanteenEmployeeRegisterModel
     {

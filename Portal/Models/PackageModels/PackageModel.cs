@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace Portal.Models
+namespace Portal.Models.PackageModels
 {
     public class PackageModel
     {

@@ -3,16 +3,12 @@ namespace Portal.Controllers
 {
     public class ReservationController : Controller
     {
-
         private readonly IPackageService _packageService;
-        private readonly IStudentService _studentService;
 
-        public ReservationController(IPackageService packageService, IStudentService studentService)
+        public ReservationController(IPackageService packageService)
         {
             _packageService = packageService;
-            _studentService = studentService;
         }
-        
 
         [HttpGet]
         [Authorize(Policy = "Student")]
