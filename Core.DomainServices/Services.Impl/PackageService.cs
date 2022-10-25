@@ -35,18 +35,23 @@
                 throw new Exception("Selecteer minimaal één product!");
 
             if (package.PickUpTime < DateTime.Now)
-                throw new Exception("De afhaaltijd moet in de toekomst liggen!");
+                throw new Exception("De ophaaltijd moet in de toekomst liggen!");
 
             if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
-                    throw new Exception("De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
+                    throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+            else if (package.LatestPickUpTime.HasValue)
+            {
+                if (package.LatestPickUpTime < DateTime.Now)
+                    throw new Exception("De uiterlijke ophaaltijd moet in de toekomst liggen!");
 
-            if (package.LatestPickUpTime < DateTime.Now)
-                    throw new Exception("De uiterlijke afhaaltijd moet in de toekomst liggen!");
-                
-            else if (package.LatestPickUpTime <= package.PickUpTime)
-                throw new Exception("De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!");
+                else if (package.LatestPickUpTime <= package.PickUpTime)
+                    throw new Exception("De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!");
 
+                else if (package.LatestPickUpTime.Value.Day != package.PickUpTime.Value.Day || package.LatestPickUpTime.Value.Month != package.PickUpTime.Value.Month || package.LatestPickUpTime.Value.Year != package.PickUpTime.Value.Year)
+                    throw new Exception("De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!");
+            }
+            
             if (!canteen!.ServesWarmMeals!.Value && package.MealType == MealtypeEnum.WarmDinner)
                 throw new Exception("Jouw kantine serveert geen warme maaltijden!");
 
@@ -61,7 +66,7 @@
                     containsAlcohol = true;
                 
                 package.Products.Add(product!);
-                product.Packages.Add(package);
+                product?.Packages!.Add(package);
             }
 
             package.IsAdult = containsAlcohol;
@@ -76,17 +81,22 @@
                 throw new Exception("Selecteer minimaal één product!");
 
             if (package.PickUpTime < DateTime.Now)
-                throw new Exception("De afhaaltijd moet in de toekomst liggen!");
+                throw new Exception("De ophaaltijd moet in de toekomst liggen!");
 
             if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day)
-                    throw new Exception("De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
+                    throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                else if (package.LatestPickUpTime.HasValue)
+                {
+                    if (package.LatestPickUpTime < DateTime.Now)
+                        throw new Exception("De uiterlijke ophaaltijd moet in de toekomst liggen!");
 
-            if (package.LatestPickUpTime < DateTime.Now)
-                throw new Exception("De uiterlijke afhaaltijd moet in de toekomst liggen!");
+                    else if (package.LatestPickUpTime <= package.PickUpTime)
+                        throw new Exception("De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!");
 
-            else if (package.LatestPickUpTime <= package.PickUpTime)
-                throw new Exception("De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!");
+                    else if (package.LatestPickUpTime.Value.Day != package.PickUpTime.Value.Day || package.LatestPickUpTime.Value.Month != package.PickUpTime.Value.Month || package.LatestPickUpTime.Value.Year != package.PickUpTime.Value.Year)
+                        throw new Exception("De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!");
+                }
 
             var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId);
 
@@ -109,7 +119,7 @@
                     containsAlcohol = true;
                 }
                 package.Products.Add(product!);
-                product.Packages.Add(package);
+                product?.Packages!.Add(package);
             }
 
             package.IsAdult = containsAlcohol;
@@ -195,8 +205,10 @@
                         throw new Exception("Je bent nog geen 18 jaar oud en mag dus geen pakketten met alcoholische inhoud reserveren!");
                 }
                 else
-                    throw new Exception("Deze maaltijd is al gereserveerd door iemand anders!");
+                    throw new Exception("Je account is niet geldig!");
             }
+            else
+                throw new Exception("Deze maaltijd is al gereserveerd door iemand anders!");
         }
         //Get all reservations from students
         public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
