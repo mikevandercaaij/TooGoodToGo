@@ -28,103 +28,15 @@
         //Create package
         public async Task AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
         {
-            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId);
-            var canteen = await _canteenService.GetCanteenByLocationAsync(user!.Location!.Value);
-
-            if (selectedProducts?.Count == 0)
-                throw new Exception("Selecteer minimaal één product!");
-
-            if (package.PickUpTime < DateTime.Now)
-                throw new Exception("De ophaaltijd moet in de toekomst liggen!");
-
-            if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
-                    throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
-            else if (package.LatestPickUpTime.HasValue)
-            {
-                if (package.LatestPickUpTime < DateTime.Now)
-                    throw new Exception("De uiterlijke ophaaltijd moet in de toekomst liggen!");
-
-                else if (package.LatestPickUpTime <= package.PickUpTime)
-                    throw new Exception("De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!");
-
-                else if (package.LatestPickUpTime.Value.Day != package.PickUpTime.Value.Day || package.LatestPickUpTime.Value.Month != package.PickUpTime.Value.Month || package.LatestPickUpTime.Value.Year != package.PickUpTime.Value.Year)
-                    throw new Exception("De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!");
-            }
-            
-            if (!canteen!.ServesWarmMeals!.Value && package.MealType == MealtypeEnum.WarmDinner)
-                throw new Exception("Jouw kantine serveert geen warme maaltijden!");
-
-            package.Canteen = canteen;
-
-            bool containsAlcohol = false;
-
-            foreach (string productName in selectedProducts!)
-            {
-                var product = await _productService.GetProductByNameAsync(productName);
-                if (product!.ContainsAlcohol)
-                    containsAlcohol = true;
-                
-                package.Products.Add(product!);
-                product?.Packages!.Add(package);
-            }
-
-            package.IsAdult = containsAlcohol;
-            
+            var alteredPackage = await ValidatePackageFormInput(package, selectedProducts, userId);
+            alteredPackage.Canteen = await _canteenService.GetCanteenByLocationAsync((CanteenLocationEnum)_canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId).Result!.Location!);
             await _packageRepository.AddPackageAsync(package);
         }
 
         //Update package
         public async Task UpdatePackageAsync(Package package, IList<string> selectedProducts, string userId)
         {
-            if (selectedProducts?.Count == 0)
-                throw new Exception("Selecteer minimaal één product!");
-
-            if (package.PickUpTime < DateTime.Now)
-                throw new Exception("De ophaaltijd moet in de toekomst liggen!");
-
-            if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
-                    throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
-                else if (package.LatestPickUpTime.HasValue)
-                {
-                    if (package.LatestPickUpTime < DateTime.Now)
-                        throw new Exception("De uiterlijke ophaaltijd moet in de toekomst liggen!");
-
-                    else if (package.LatestPickUpTime <= package.PickUpTime)
-                        throw new Exception("De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!");
-
-                    else if (package.LatestPickUpTime.Value.Day != package.PickUpTime.Value.Day || package.LatestPickUpTime.Value.Month != package.PickUpTime.Value.Month || package.LatestPickUpTime.Value.Year != package.PickUpTime.Value.Year)
-                        throw new Exception("De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!");
-                }
-
-            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId);
-
-            if (user != null)
-            {
-                var canteen = await _canteenService.GetCanteenByLocationAsync(user.Location!.Value);
-
-                if (canteen != null)
-                    if (!canteen.ServesWarmMeals!.Value && package.MealType == MealtypeEnum.WarmDinner)
-                        throw new Exception("Jouw kantine serveert geen warme maaltijden!");
-            }
-
-            bool containsAlcohol = false;
-
-            foreach (string productName in selectedProducts!)
-            {
-                var product = await _productService.GetProductByNameAsync(productName);
-                if (product!.ContainsAlcohol)
-                {
-                    containsAlcohol = true;
-                }
-                package.Products.Add(product!);
-                product?.Packages!.Add(package);
-            }
-
-            package.IsAdult = containsAlcohol;
-
-            await _packageRepository.UpdatePackageAsync(package);
+            await _packageRepository.UpdatePackageAsync(await ValidatePackageFormInput(package, selectedProducts, userId));
         }
 
         //Validation to get package update page
@@ -256,6 +168,54 @@
                 if (canteenEmployee.Location == package.Canteen!.Location)
                     return true;
             return false;
+        }
+
+        //Validate form input package
+        public async Task<Package> ValidatePackageFormInput(Package package, IList<string> selectedProducts, string userId)
+        {
+            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId);
+            var canteen = await _canteenService.GetCanteenByLocationAsync(user!.Location!.Value);
+
+            if (selectedProducts?.Count == 0)
+                throw new Exception("Selecteer minimaal één product!");
+
+            if (package.PickUpTime < DateTime.Now)
+                throw new Exception("De ophaaltijd moet in de toekomst liggen!");
+
+            if (package.PickUpTime.HasValue)
+                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
+                    throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
+                else if (package.LatestPickUpTime.HasValue)
+                {
+                    if (package.LatestPickUpTime < DateTime.Now)
+                        throw new Exception("De uiterlijke ophaaltijd moet in de toekomst liggen!");
+
+                    else if (package.LatestPickUpTime <= package.PickUpTime)
+                        throw new Exception("De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!");
+
+                    else if (package.LatestPickUpTime.Value.Day != package.PickUpTime.Value.Day || package.LatestPickUpTime.Value.Month != package.PickUpTime.Value.Month || package.LatestPickUpTime.Value.Year != package.PickUpTime.Value.Year)
+                        throw new Exception("De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!");
+                }
+
+            if (!canteen!.ServesWarmMeals!.Value && package.MealType == MealtypeEnum.WarmDinner)
+                throw new Exception("Jouw kantine serveert geen warme maaltijden!");
+
+            bool containsAlcohol = false;
+
+            foreach (string productName in selectedProducts!)
+            {
+                var product = await _productService.GetProductByNameAsync(productName);
+                if (product!.ContainsAlcohol)
+                {
+                    containsAlcohol = true;
+                }
+                package.Products.Add(product!);
+                product?.Packages!.Add(package);
+            }
+
+            package.IsAdult = containsAlcohol;
+
+            return package;
         }
     }
 }
