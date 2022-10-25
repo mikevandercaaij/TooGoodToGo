@@ -22,8 +22,8 @@ namespace Core.DomainServices.Services.Impl
             {
                 productList.Add(new SelectListItem { Text = product.Name, Value = product.Name });
             }
-
-            return productList;
+            
+            return productList.OrderBy(p => p.Text).ToList();
         }
     }
 }
