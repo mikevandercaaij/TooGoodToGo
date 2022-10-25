@@ -67,74 +67,90 @@ namespace Infrastructure.Contexts
                 new Product()
                 {
                     ProductId = 1,
-                    Name = "Appel",
+                    Name = "Broodje gezond",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://appleridgeorchards.com/wp-content/uploads/2021/05/Apple-Picking-Icon-1-400x400-1.png")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://lunchroom28.nl/wp-content/uploads/2021/11/broodje-gezond.jpg").Result)
+
                 },
                 new Product()
                 {
                     ProductId = 2,
-                    Name = "Bier",
-                    ContainsAlcohol = true,
-                    Picture = new WebClient().DownloadData("https://www.arjenverhuurt.nl/wp-content/uploads/rentman/jupiler-krat-24-x-25-cl-19625.jpg")
+                    Name = "Tosti",
+                    ContainsAlcohol = false,
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://d1mlbwr23caxox.cloudfront.net/public/sites/default/files/recipe-images/italiaanse-tosti_1.jpg?VersionId=iTZSc.tVjriNS8ShQSvjoP0qtzYbvmoh").Result)
                 },
                 new Product()
                 {
                     ProductId = 3,
-                    Name = "Pakje melk",
+                    Name = "Pizza",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2012/09/milk.jpg")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://www.thespruceeats.com/thmb/t7yCtb3norW0m37YBfJOcS7Qd_w=/1000x1000/smart/filters:no_upscale()/prosciutto-pizza-4844358-hero-04-c0a6f73057ce4fed88982b75a5c2c8e1.jpg").Result)
                 },
                 new Product()
                 {
                     ProductId = 4,
-                    Name = "Eiersalade",
-                    ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://therecipecritic.com/wp-content/uploads/2019/02/besteggsalad-500x500.jpg")
+                    Name = "Bier",
+                    ContainsAlcohol = true,
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://www.shape.com/thmb/o5FUbsfmic5_-U1ES1S51PaQpxM=/1000x1000/smart/filters:no_upscale():focal(499x0:501x2)/low-calorie-beers-44b18824f4fa4313af94afa2d7148180.png").Result)
                 },
                 new Product()
                 {
                     ProductId = 5,
-                    Name = "Broodje gezond",
+                    Name = "Blikje Cola",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://www.bakkerbart.nl/media/catalog/product/cache/afb382f2589f4527c76899f7685dfe75/b/a/bartje_gezond_1.jpg")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://images.unsplash.com/photo-1514178255089-603d3a35b24a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGNvY2ElMjBjb2xhJTIwY2FufGVufDB8fDB8fA%3D%3D&w=1000&q=80").Result)
+
                 },
                 new Product()
                 {
                     ProductId = 6,
-                    Name = "Blikje Cola",
+                    Name = "Flesje water",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://www.shopbijalbatros.nl/media/catalog/product/cache/cd55d730358cf47f86f915a351923ecb/2/0/200.000343-voorkant.jpg_1.jpg")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://www.verywellfit.com/thmb/r23Iyl6xjjk9lnG9ydKB95y5HxQ=/1000x1000/smart/filters:no_upscale()/water-56bb320b3df78c0b136eb382.jpg").Result)
                 },
                 new Product()
                 {
                     ProductId = 7,
-                    Name = "Croissant",
-                    ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://www.okokorecepten.nl/i/recepten/kookboeken/2009/kook-ook-brood/zelfgebakken-croissants-500.jpg")
+                    Name = "Wijn",
+                    ContainsAlcohol = true,
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://media-production.procook.io/c82518737b051eb60d4dedc31c0fd9af.jpg").Result)
                 },
                 new Product()
                 {
                     ProductId = 8,
-                    Name = "Appelmoes",
+                    Name = "Koffie",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://ilovefoodwine.nl/content/uploads/2021/03/shutterstock_177416972-500x375.jpg")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://drivu.s3.eu-west-1.amazonaws.com/uploads/menu_item/image/123678/thumb_Americano.jpg").Result)
                 },
                 new Product()
                 {
                     ProductId = 9,
-                    Name = "Wijn",
-                    ContainsAlcohol = true,
-                    Picture = new WebClient().DownloadData("https://cdn.webshopapp.com/shops/29951/files/378792565/image.jpg")
+                    Name = "Falafel",
+                    ContainsAlcohol = false,
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://www.cleaneatingmag.com/wp-content/uploads/2015/11/falafelpitasandwich.jpg?crop=1:1&width=1000").Result)
                 },
                 new Product()
                 {
                     ProductId = 10,
-                    Name = "Koffie",
+                    Name = "Hamburger",
                     ContainsAlcohol = false,
-                    Picture = new WebClient().DownloadData("https://image.gezondheid.be/XTRA/123m-koffie-espresso-27-8.jpg")
+                    Picture = ReadStream(new HttpClient().GetStreamAsync("https://montrealpizza.com.cy/wp-content/uploads/2021/11/Hamburger-Bu.jpg").Result)
                 },
             });
+        }
+
+        public static byte[] ReadStream(Stream stream)
+        {
+            byte[] Buffer = new byte[16 * 1024];
+            using (MemoryStream MS = new MemoryStream())
+            {
+                int Read;
+                while ((Read = stream.Read(Buffer, 0, Buffer.Length)) > 0)
+                {
+                    MS.Write(Buffer, 0, Read);
+                }
+                return MS.ToArray();
+            }
         }
     }
 }
