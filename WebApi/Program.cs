@@ -1,3 +1,5 @@
+using static HotChocolate.SchemaBuilder;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -25,9 +27,20 @@ builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.Authenticati
     options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["BearerTokens:Key"]));
 });
 
-builder.Services.AddTransient<PackageRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ICanteenRepository, CanteenRepository>();
+builder.Services.AddScoped<ICanteenEmployeeRepository, CanteenEmployeeRepository>();
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICanteenService, CanteenService>();
+builder.Services.AddScoped<ICanteenEmployeeService, CanteenEmployeeService>();
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddGraphQLServer().RegisterService<PackageRepository>().AddQueryType<Query>();
+
 
 var app = builder.Build();
 

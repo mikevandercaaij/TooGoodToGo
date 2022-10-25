@@ -35,6 +35,7 @@
 
         [HttpPost]
         [Authorize(Policy = "CanteenEmployee")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePackage(PackageModel packageModel)
         {
             try
@@ -60,16 +61,19 @@
                 if (e.Message == "Selecteer minimaal één product!")
                     ModelState.AddModelError("Products", e.Message);
 
-                if (e.Message == "De afhaaltijd moet in de toekomst liggen!")
+                if (e.Message == "De ophaaltijd moet in de toekomst liggen!")
                     ModelState.AddModelError("PickUpTime", e.Message);
 
-                if (e.Message == "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
+                if (e.Message == "De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
                     ModelState.AddModelError("PickUpTime", e.Message);
 
-                if (e.Message == "De uiterlijke afhaaltijd moet in de toekomst liggen!")
+                if (e.Message == "De uiterlijke ophaaltijd moet in de toekomst liggen!")
                     ModelState.AddModelError("LatestPickUpTime", e.Message);
 
-                if (e.Message == "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!")
+                if (e.Message == "De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
+
+                if (e.Message == "De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!")
                     ModelState.AddModelError("LatestPickUpTime", e.Message);
 
                 if (e.Message == "Jouw kantine serveert geen warme maaltijden!")
@@ -134,6 +138,7 @@
 
         [HttpPost]
         [Authorize(Policy = "CanteenEmployee")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPackage(PackageModel packageModel)
         {
             try
@@ -155,16 +160,19 @@
                 if (e.Message == "Selecteer minimaal één product!")
                     ModelState.AddModelError("Products", e.Message);
 
-                if (e.Message == "De afhaaltijd moet in de toekomst liggen!")
+                if (e.Message == "De ophaaltijd moet in de toekomst liggen!")
                     ModelState.AddModelError("PickUpTime", e.Message);
 
-                if (e.Message == "De afhaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
+                if (e.Message == "De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!")
                     ModelState.AddModelError("PickUpTime", e.Message);
 
-                if (e.Message == "De uiterlijke afhaaltijd moet in de toekomst liggen!")
+                if (e.Message == "De uiterlijke ophaaltijd moet in de toekomst liggen!")
                     ModelState.AddModelError("LatestPickUpTime", e.Message);
 
-                if (e.Message == "De uiterlijke afhaaltijd moet na de afhaaltijd plaatsvinden!")
+                if (e.Message == "De uiterlijke ophaaltijd moet na de ophaaltijd plaatsvinden!")
+                    ModelState.AddModelError("LatestPickUpTime", e.Message);
+
+                if (e.Message == "De ophaaltijd en uiterlijke ophaaltijd moeten op dezelfde dag zijn!")
                     ModelState.AddModelError("LatestPickUpTime", e.Message);
 
                 if (e.Message == "Jouw kantine serveert geen warme maaltijden!")
@@ -177,6 +185,7 @@
 
         [HttpPost]
         [Authorize(Policy = "CanteenEmployee")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePackage(int id)
         {
             try
@@ -201,6 +210,7 @@
             }
         }
 
+        [HttpGet]
         [Authorize(Policy = "Student")]
         public async Task<IActionResult> ReservePackage(int id)
         {
