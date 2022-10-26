@@ -1,16 +1,4 @@
-using Core.Domain.Entities;
-using Core.Domain.Enums;
-using Core.DomainServices.Repos.Intf;
-using Core.DomainServices.Services.Impl;
-using Core.DomainServices.Services.Intf;
-using Moq;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Xunit;
-
 namespace Core.DomainServices.Tests
-
 {
     public class PackageServiceTests
     {
