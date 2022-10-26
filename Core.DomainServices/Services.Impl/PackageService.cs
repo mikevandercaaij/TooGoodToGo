@@ -26,17 +26,20 @@
         public async Task<Package> GetPackageByIdAsync(int id) => await _packageRepository.GetPackageByIdAsync(id);
 
         //Create package
-        public async Task AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
+        public async Task<bool> AddPackageAsync(Package package, IList<string> selectedProducts, string userId)
         {
             var alteredPackage = await ValidatePackageFormInput(package, selectedProducts, userId);
             alteredPackage.Canteen = await _canteenService.GetCanteenByLocationAsync((CanteenLocationEnum)_canteenEmployeeService.GetCanteenEmployeeByIdAsync(userId).Result!.Location!);
             await _packageRepository.AddPackageAsync(package);
+
+            return true;
         }
 
         //Update package
-        public async Task UpdatePackageAsync(Package package, IList<string> selectedProducts, string userId)
+        public async Task<bool> UpdatePackageAsync(Package package, IList<string> selectedProducts, string userId)
         {
             await _packageRepository.UpdatePackageAsync(await ValidatePackageFormInput(package, selectedProducts, userId));
+            return true;
         }
 
         //Validation to get package update page
@@ -61,14 +64,17 @@
         }
 
         //Delete package
-        public async Task DeletePackageAsync(int packageId, string userId)
+        public async Task<bool> DeletePackageAsync(int packageId, string userId)
         {
             var package = await GetPackageByIdAsync(packageId);
 
             if (package != null)
                 if (await IsOurCanteensPackageAsync(package, userId))
                     if (package.ReservedBy == null || DateTime.Now > package.LatestPickUpTime)
+                    {
                         await _packageRepository.DeletePackageAsync(package.PackageId);
+                        return true;
+                    }
                     else
                         throw new Exception("De maaltijd is al gereserveerd en mag dan ook niet worden verwijderd!");
                 else
@@ -81,7 +87,7 @@
         //:::::::::::::::::::::::::::
 
         //Reserve package
-        public async Task ReservePackageAsync(int packageId, string userId)
+        public async Task<bool> ReservePackageAsync(int packageId, string userId)
         {
             var package = await GetPackageByIdAsync(packageId);
 
@@ -109,6 +115,7 @@
                         {
                             package.ReservedBy = student;
                             await _packageRepository.UpdatePackageAsync(package);
+                            return true;
                         }
                         else
                             throw new Exception("Je hebt al een pakket gereserveerd op deze ophaaldag!");
