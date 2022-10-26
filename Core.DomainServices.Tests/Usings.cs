@@ -1,1 +1,10 @@
+global using Core.Domain.Entities;
+global using Core.Domain.Enums;
+global using Core.DomainServices.Repos.Intf;
+global using Core.DomainServices.Services.Impl;
+global using Core.DomainServices.Services.Intf;
+global using Moq;
+global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
+global using System.Linq;
 global using Xunit;
