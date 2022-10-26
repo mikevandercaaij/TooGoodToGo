@@ -32,12 +32,12 @@ namespace Core.DomainServices.Tests
         public void GetCanteenByLocation_When_Canteen_Doesnt_Exist_Throw_Corresponding_Exception()
         {
             //Arrange
-            var _canteenRepositoryMock = new Mock<ICanteenRepository>(); 
+            var _canteenRepositoryMock = new Mock<ICanteenRepository>();
 
             var sut = new CanteenService(_canteenRepositoryMock.Object);
 
             //Act
-            var result = Record.ExceptionAsync(() => sut.GetCanteenByLocationAsync(null!)).Result;
+            var result = Record.ExceptionAsync(() => sut.GetCanteenByLocationAsync(CanteenLocationEnum.LA)).Result;
 
             //Assert
             Assert.True(result.Message == "Deze kantine bestaat niet!");
