@@ -12,7 +12,19 @@ namespace Core.DomainServices.Services.Impl
             _canteenRepository = canteenRepository;
         }
         
-        public Task<IEnumerable<Canteen>> GetAllCanteensAsync() => _canteenRepository.GetAllCanteensAsync();
-        public Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum location) => _canteenRepository.GetCanteenByLocationAsync(location);
+        public async Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum location)
+        {
+            var canteen = await _canteenRepository.GetCanteenByLocationAsync(location);
+
+            if (canteen == null)
+                throw new Exception("Deze kantine bestaat niet!");
+
+            return canteen;
+        }
+
+        public Task GetCanteenByLocationAsync(object value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

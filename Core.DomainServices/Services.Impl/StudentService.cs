@@ -1,4 +1,6 @@
-﻿namespace Core.DomainServices.Services.Impl
+﻿using Core.Domain.Entities;
+
+namespace Core.DomainServices.Services.Impl
 {
     public class StudentService : IStudentService
     {
@@ -8,8 +10,25 @@
         {
             _studentRepository = studentRepository;
         }
-        public async Task AddStudentAsync(Student student) => await _studentRepository.AddStudentAsync(student);
-        public async Task<Student?> GetStudentByIdAsync(string id) => await _studentRepository.GetStudentByIdAsync(id);
+        public async Task<bool> AddStudentAsync(Student student)
+        {
+            if (student == null)
+                throw new Exception("Deze student bestaat niet!");
+
+            await _studentRepository.AddStudentAsync(student);
+            return true;
+        }
+
+
+        public async Task<Student?> GetStudentByIdAsync(string id)
+        {
+            var student = await _studentRepository.GetStudentByIdAsync(id);
+
+            if (student == null)
+                throw new Exception("Deze student bestaat niet!");
+
+            return student;
+        }
     }
 }
     

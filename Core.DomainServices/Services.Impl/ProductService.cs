@@ -11,8 +11,24 @@ namespace Core.DomainServices.Services.Impl
             _productRepository = productRepository;
         }
         public async Task<IEnumerable<Product>> GetAllProductsAsync() => await _productRepository.GetAllProductsAsync();
-        public async Task<Product?> GetProductByIdAsync(int id) => await _productRepository.GetProductByIdAsync(id);
-        public async Task<Product?> GetProductByNameAsync(string name) => await _productRepository.GetProductByNameAsync(name);
+        public async Task<Product?> GetProductByIdAsync(int id)
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+            
+            if (product == null)
+                throw new Exception("Dit product bestaat niet!");
+
+            return product;
+        }
+        public async Task<Product?> GetProductByNameAsync(string name)
+        {
+            var product = await _productRepository.GetProductByNameAsync(name);
+
+            if (product == null)
+                throw new Exception("Dit product bestaat niet!");
+
+            return product;
+        }
         public async Task<IList<SelectListItem>> GetAllSelectListItems()
         {
             List<SelectListItem> productList = new();
