@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Package>
 @{
-    ViewData["Title"] = "Onze pakketten";
+    ViewData["Title"] = "Overige pakketten";
 }
 
 @if (Model.Count() > 0)
@@ -8,7 +8,7 @@
     <div class="--packageOverviewHolder">
         <div class="row">
             <div class="col-12">
-                <h1 class="--main-title">Alle pakketten van jouw kantine</h1>
+                <h1 class="--main-title">Alle pakketten van andere kantines</h1>
                 <hr class="--divider"/>
             </div>
 
@@ -38,7 +38,7 @@
 else
 {
      <div class="--packageOverviewHolder" style="text-align:center;">
-        <h1 class="--main-title">Jouw kantine heeft nog geen pakketten.</h1>
-        <p>Klik <a class="--text-link" asp-action="CreatePackage">hier</a> om een pakket aan te maken!</p>
+        <h1 class="--main-title">De andere kantines hebben nog geen pakketten.</h1>
+        <p>Kom op een later moment terug!</p>
     </div>
 }

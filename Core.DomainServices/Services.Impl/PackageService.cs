@@ -150,7 +150,7 @@
         public async Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(CanteenLocationEnum location)
         {
             var allPackages = await _packageRepository.GetAllPackagesAsync();
-            return allPackages.Where(p => p.Canteen?.Location == location).OrderBy(p => p.PickUpTime);
+            return allPackages.Where(p => p.Canteen?.Location == location && p.LatestPickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
 
         //Get all active packages from canteen
@@ -165,6 +165,14 @@
         {
             return (await _packageRepository.GetAllPackagesAsync()).Where(p => p.ReservedBy == null).Where(p => p.LatestPickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
         }
+
+        //Get all packages from other canteens
+        public async Task<IEnumerable<Package>> GetAllPackagesFromOtherCanteensAsync(CanteenLocationEnum location)
+        {
+            var allPackages = await _packageRepository.GetAllPackagesAsync();
+            return allPackages.Where(p => p.Canteen?.Location != location && p.LatestPickUpTime > DateTime.Now).OrderBy(p => p.PickUpTime);
+        }
+
 
         //Check if package is from user's canteen
         public async Task<bool> IsOurCanteensPackageAsync(Package package, string userId)
@@ -190,7 +198,7 @@
                 throw new Exception("De ophaaltijd moet in de toekomst liggen!");
 
             if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day && package.PickUpTime.Value.Month == DateTime.Now.AddDays(2).Month && package.PickUpTime.Value.Year == DateTime.Now.AddDays(2).Year)
+                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day || package.PickUpTime.Value.Month != DateTime.Now.AddDays(2).Month || package.PickUpTime.Value.Year != DateTime.Now.AddDays(2).Year)
                     throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
                 else if (package.LatestPickUpTime.HasValue)
                 {

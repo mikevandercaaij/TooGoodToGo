@@ -1470,7 +1470,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllReservationsFromStudentAsync("2184147").Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all students reservations | return 0
@@ -1550,7 +1550,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllActiveReservationsFromStudentAsync("2184147").Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all students active reservations | return 0
@@ -1583,7 +1583,7 @@ namespace Core.DomainServices.Tests
             Assert.Empty(result);
         }
 
-        //get all canteens reservations | return 3
+        //get all packages from canteen | return 3
         [Fact]
         public void Get_All_Packages_From_Canteen_Should_Return_3_Packages()
         {
@@ -1606,6 +1606,7 @@ namespace Core.DomainServices.Tests
                 new Package
                 {
                     PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
                     Canteen = new Canteen
                     {
                         Location = CanteenLocationEnum.LA
@@ -1614,6 +1615,7 @@ namespace Core.DomainServices.Tests
                 new Package
                 {
                     PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
                     Canteen = new Canteen
                     {
                         Location = CanteenLocationEnum.LA
@@ -1622,6 +1624,7 @@ namespace Core.DomainServices.Tests
                 new Package
                 {
                     PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
                     Canteen = new Canteen
                     {
                         Location = CanteenLocationEnum.LA
@@ -1635,10 +1638,10 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllPackagesFromCanteenAsync(CanteenLocationEnum.LA).Result;
                 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
-        //get all canteens reservations | return 0
+        //get all packages from canteen | return 0
         [Fact]
         public void Get_All_Packages_From_Canteen_Should_Return_0_Packages()
         {
@@ -1659,7 +1662,90 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllPackagesFromCanteenAsync(CanteenLocationEnum.LA).Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
+        }
+
+        //get all packages from other canteens | return 3
+
+        [Fact]
+        public void Get_All_Packages_From_Other_Canteens_Should_Return_3_Packages()
+        {
+            //Arrange
+            var _packageRepositoryMock = new Mock<IPackageRepository>();
+            var _canteenEmployeeServiceMock = new Mock<ICanteenEmployeeService>();
+            var _canteenServiceMock = new Mock<ICanteenService>();
+            var _productServiceMock = new Mock<IProductService>();
+            var _studentServiceMock = new Mock<IStudentService>();
+
+            var sut = new PackageService(_packageRepositoryMock.Object, _canteenEmployeeServiceMock.Object, _canteenServiceMock.Object, _productServiceMock.Object, _studentServiceMock.Object);
+
+            var student = new Student
+            {
+                StudentNumber = "2184147",
+            };
+
+            var packages = new List<Package>()
+            {
+                new Package
+                {
+                    PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
+                    Canteen = new Canteen
+                    {
+                        Location = CanteenLocationEnum.LD
+                    },
+                },
+                new Package
+                {
+                    PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
+                    Canteen = new Canteen
+                    {
+                        Location = CanteenLocationEnum.LD
+                    },
+                },
+                new Package
+                {
+                    PickUpTime = DateTime.Now.AddDays(+2).AddMinutes(10),
+                    LatestPickUpTime = DateTime.Now.AddDays(+2).AddMinutes(15),
+                    Canteen = new Canteen
+                    {
+                        Location = CanteenLocationEnum.LD
+                    },
+                },
+            };
+
+            _packageRepositoryMock.Setup(x => x.GetAllPackagesAsync().Result).Returns(packages);
+
+            //Act
+            var result = sut.GetAllPackagesFromOtherCanteensAsync(CanteenLocationEnum.LA).Result;
+
+            //Assert
+            Assert.Equal(packages.Count, result.Count());
+        }
+
+        //get all packages from other canteens | return 0
+        [Fact]
+        public void Get_All_Packages_From_Other_Canteens_Should_Return_0_Packages()
+        {
+            //Arrange
+            var _packageRepositoryMock = new Mock<IPackageRepository>();
+            var _canteenEmployeeServiceMock = new Mock<ICanteenEmployeeService>();
+            var _canteenServiceMock = new Mock<ICanteenService>();
+            var _productServiceMock = new Mock<IProductService>();
+            var _studentServiceMock = new Mock<IStudentService>();
+
+            var sut = new PackageService(_packageRepositoryMock.Object, _canteenEmployeeServiceMock.Object, _canteenServiceMock.Object, _productServiceMock.Object, _studentServiceMock.Object);
+
+            var packages = new List<Package>();
+
+            _packageRepositoryMock.Setup(x => x.GetAllPackagesAsync().Result).Returns(packages);
+
+            //Act
+            var result = sut.GetAllPackagesFromOtherCanteensAsync(CanteenLocationEnum.LA).Result;
+
+            //Assert
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all canteens active reservations | return 3
@@ -1720,7 +1806,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllActivePackagesFromCanteenAsync(CanteenLocationEnum.LA).Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all canteens active reservations | return 0
@@ -1749,7 +1835,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllActivePackagesFromCanteenAsync(CanteenLocationEnum.LA).Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all offered packages | return 3
@@ -1793,7 +1879,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllOfferedPackagesAsync().Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
 
         //get all offered packages | return 0
@@ -1817,7 +1903,7 @@ namespace Core.DomainServices.Tests
             var result = sut.GetAllOfferedPackagesAsync().Result;
 
             //Assert
-            Assert.Equal(packages.Count(), result.Count());
+            Assert.Equal(packages.Count, result.Count());
         }
     }
 }
