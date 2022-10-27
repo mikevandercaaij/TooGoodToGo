@@ -66,7 +66,7 @@
                     }
                     else
                     {
-                        <a class="nav-link" asp-action="Logout" asp-controller="Account">Uitloggen</a>
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#logOutModal">Uitloggen</a>
                     }
                 </div>
             </div>
@@ -74,6 +74,33 @@
     </header>
     <div class="container">
         @RenderBody()
+
+
+        @if (role == "Student" || role == "CanteenEmployee")
+        {
+            <!-- Modal -->
+            <div class="modal fade" id="logOutModal" aria-hidden="true" aria-labelledby="logOutModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="logOutModal">Uitloggen</h5>
+                            <a class="modal-close-btn" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                       <div class="modal-body"> 
+                            Weet je zeker dat je uit wilt loggen?
+                        </div>
+                        <div class="modal-footer">
+                            <form  asp-action="Logout" asp-controller="Account">
+                                <button class="--main-btn" type="submit">Uitloggen</button>
+                            </form>
+                            <div>
+                                <button type="button" class="--main-btn" data-bs-dismiss="modal">Annuleren</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 
     <footer class="border-top footer text-muted --footer-holder">
