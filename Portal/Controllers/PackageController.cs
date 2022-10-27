@@ -250,5 +250,15 @@
 
             return View(packages);
         }
+
+        [HttpGet]
+        [Authorize(Policy = "CanteenEmployee")]
+        public async Task<IActionResult> OtherPackages()
+        {
+            var user = await _canteenEmployeeService.GetCanteenEmployeeByIdAsync(this.User.Identity?.Name!);
+            var packages = await _packageService.GetAllPackagesFromOtherCanteensAsync((CanteenLocationEnum)user?.Location!);
+
+            return View(packages);
+        }
     }
 }

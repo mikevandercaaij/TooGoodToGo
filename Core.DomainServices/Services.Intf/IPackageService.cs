@@ -23,6 +23,7 @@ namespace Core.DomainServices.Services.Intf
         //:::::::::::::::::::::::::::
         Task<IEnumerable<Package>> GetAllPackagesFromCanteenAsync(CanteenLocationEnum location);
         Task<IEnumerable<Package>> GetAllActivePackagesFromCanteenAsync(CanteenLocationEnum location);
+        Task<IEnumerable<Package>> GetAllPackagesFromOtherCanteensAsync(CanteenLocationEnum location);
         Task<IEnumerable<Package>> GetAllOfferedPackagesAsync();
         Task<bool> IsOurCanteensPackageAsync(Package package, string userId);
         Task<Package> ValidatePackageFormInput(Package package, IList<string> selectedProducts, string userId);
