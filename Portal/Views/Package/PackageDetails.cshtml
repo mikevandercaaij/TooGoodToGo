@@ -12,10 +12,10 @@
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
                     <div class="alert alert-danger" role="alert">
- 
+
                         <p style="margin:0;">
-                       <i class="fa-solid fa-triangle-exclamation" style="margin-right:5px;"></i> 
-                       @error.ErrorMessage
+                            <i class="fa-solid fa-triangle-exclamation" style="margin-right:5px;"></i>
+                            @error.ErrorMessage
                         </p>
                     </div>
                 }
@@ -46,7 +46,8 @@
                 </p>
                 <p class="card-text">Gereserveerd: @Html.Raw(@Model.Package.IsReserved())</p>
 
-                @if(Model.Name != null) {
+                @if (Model.Name != null)
+                {
                     <p>Naam: @Model.Name</p>
                 }
 
@@ -75,19 +76,64 @@
             <div class="--detail-button-holder">
                 @if (role == "Student" && @Model.Package!.ReservedBy == null)
                 {
-                    <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                        <button class="--main-btn --button-res" type="submit">Reserveer pakket</button>
+                    <form>
+                        <button class="--main-btn --button-res" type="button" data-bs-toggle="modal" data-bs-target="#ReservePackageModal">Reserveer pakket</button>
                     </form>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="ReservePackageModal" aria-hidden="true" aria-labelledby="ReservePackageModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="logOutModal">Pakket reserveren</h5>
+                                    <a class="modal-close-btn" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="modal-body">
+                                    Weet je zeker dat je het pakket wilt reserveren?
+                                </div>
+                                <div class="modal-footer">
+                                    <form method="get" asp-action="ReservePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                                        <button class="--main-btn" type="submit">Reserveren</button>
+                                    </form>
+                                    <div>
+                                        <button type="button" class="--main-btn" data-bs-dismiss="modal">Annuleren</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
                 else if (role == "CanteenEmployee" && @Model.Package!.ReservedBy == null && @Model.CanteenEmployeeLocation == Model.Package!.Canteen.Location)
                 {
                     <form method="get" asp-action="EditPackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                            <button class="--main-btn --button-res" type="submit">Bewerk pakket</button>
+                        <button class="--main-btn --button-res" type="submit">Bewerk pakket</button>
                     </form>
+                        <form>
+                            <button type="button" class="--main-btn" data-bs-toggle="modal" data-bs-target="#DeletePackageModal">Verwijder pakket</button>
+                        </form>
 
-                    <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
-                        <button class="--main-btn">Verwijder pakket</button>
-                    </form>
+                    <!-- Modal -->
+                    <div class="modal fade" id="DeletePackageModal" aria-hidden="true" aria-labelledby="DeletePackageModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="logOutModal">Pakket verwijderen</h5>
+                                    <a class="modal-close-btn" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="modal-body">
+                                    Weet je zeker dat je het pakket wilt verwijderen?
+                                </div>
+                                <div class="modal-footer">
+                                    <form method="post" asp-action="DeletePackage" asp-controller="Package" asp-route-id="@Model.Package!.PackageId">
+                                        <button class="--main-btn" type="submit">Verwijderen</button>
+                                    </form>
+                                    <div>
+                                        <button type="button" class="--main-btn" data-bs-dismiss="modal">Annuleren</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
         </div>
