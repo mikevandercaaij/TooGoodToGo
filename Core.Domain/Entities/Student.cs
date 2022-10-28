@@ -5,10 +5,10 @@
         [Key]
         public int StudentId { get; set; }
 
-        [Required(ErrorMessage = "Vul je voornaam in")]
+        [Required(ErrorMessage = "Vul je voornaam in!")]
         public string? FirstName { get; set; }
 
-        [Required(ErrorMessage = "Vul je achternaam in")]
+        [Required(ErrorMessage = "Vul je achternaam in!")]
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Vul je geboortedatum in!")]
