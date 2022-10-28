@@ -77,8 +77,8 @@ namespace Portal.Controllers
                     ModelState["StudentNumber"]?.Errors.Add("Er bestaat al een account met dit studentennummer!");
             }
 
-            if (studentModel.DateOfBirth != null && studentModel.DateOfBirth!.Value.AddYears(16) > DateTime.Now)
-                ModelState.AddModelError(nameof(studentModel.DateOfBirth), "Je moet minimaal 16 jaar zijn om te registeren als student!");
+            //if (studentModel.DateOfBirth != null && studentModel.DateOfBirth!.Value.AddYears(16) > DateTime.Now)
+            //    ModelState.AddModelError(nameof(studentModel.DateOfBirth), "Je moet minimaal 16 jaar zijn om te registeren als student!");
 
             if (studentModel.Password != null)
                 if (!PasswordValidation(studentModel.Password))

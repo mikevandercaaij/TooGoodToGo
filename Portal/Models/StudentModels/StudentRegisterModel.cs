@@ -5,16 +5,16 @@ namespace Portal.Models.StudentModels
     public class StudentRegisterModel
     {
         [Display(Name = "Voornaam")]
-        [Required(ErrorMessage = "Vul je voornaam in")]
-
+        [Required(ErrorMessage = "Vul je voornaam in!")]
         public string? FirstName { get; set; }
 
         [Display(Name = "Achternaam")]
-        [Required(ErrorMessage = "Vul je achternaam in")]
+        [Required(ErrorMessage = "Vul je achternaam in!")]
         public string? LastName { get; set; }
 
         [Display(Name = "Geboortedatum")]
         [Required(ErrorMessage = "Vul je geboortedatum in!")]
+        [DateOfBirthAgeCheck(ErrorMessage = "Je moet minimaal 16 jaar zijn om te registeren als student!")]
         public DateTime? DateOfBirth { get; set; }
 
         [Display(Name = "Studentennummer")]

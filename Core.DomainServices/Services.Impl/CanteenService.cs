@@ -21,10 +21,5 @@ namespace Core.DomainServices.Services.Impl
 
             return canteen;
         }
-
-        public Task GetCanteenByLocationAsync(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
