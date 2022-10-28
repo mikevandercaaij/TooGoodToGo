@@ -4,6 +4,6 @@ namespace Core.DomainServices.Repos.Intf
 {
     public interface ICanteenRepository
     {
-        Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum id);
+        Task<Canteen?> GetCanteenByLocationAsync(CanteenLocationEnum location);
     }
 }
