@@ -32,15 +32,15 @@
 
                             @if(role == "Student") {
                                 <form>
-                                    <button class="--main-btn" style="margin-top:15px;" type="button" data-bs-toggle="modal" data-bs-target="#ReservePackageModal">Reserveer pakket</button>
+                                    <button class="--main-btn" style="margin-top:15px;" type="button" data-bs-toggle="modal" data-bs-target="#ReservePackageModal-@p.PackageId">Reserveer pakket</button>
                                 </form>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="ReservePackageModal" aria-hidden="true" aria-labelledby="ReservePackageModal" tabindex="-1">
+                                <div class="modal fade" id="ReservePackageModal-@p.PackageId" aria-hidden="true" aria-labelledby="ReservePackageModal-@p.PackageId" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="logOutModal">Pakket reserveren</h5>
+                                                <h5 class="modal-title" id="ReservePackageModal-@p.PackageId">Pakket reserveren</h5>
                                                 <a class="modal-close-btn" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></a>
                                             </div>
                                             <div class="modal-body">
