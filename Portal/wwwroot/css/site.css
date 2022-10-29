@@ -66,6 +66,10 @@ main {
     vertical-align: middle;
 }
 
+.container {
+    margin-bottom:30px;
+}
+
 /* Home cards 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
