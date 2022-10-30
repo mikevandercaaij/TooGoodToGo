@@ -1139,7 +1139,7 @@ namespace Core.DomainServices.Tests
             var result = Record.ExceptionAsync(() => sut.ReservePackageAsync(2, "2184147")).Result;
 
             //Assert
-            Assert.True(result.Message == "Deze maaltijd is al gereserveerd door iemand anders!");
+            Assert.True(result.Message == "Het pakket bestaat niet of is al gereserveerd door iemand anders!");
             _packageRepositoryMock.Verify(x => x.GetPackageByIdAsync(2), Times.Once);
         }
 

@@ -198,7 +198,7 @@
                 throw new Exception("De ophaaltijd moet in de toekomst liggen!");
 
             if (package.PickUpTime.HasValue)
-                if (package.PickUpTime.Value.Day > DateTime.Now.AddDays(2).Day || package.PickUpTime.Value.Month != DateTime.Now.AddDays(2).Month || package.PickUpTime.Value.Year != DateTime.Now.AddDays(2).Year)
+                if (package.PickUpTime.Value.AddDays(3).Day > DateTime.Now.AddDays(5).Day || package.PickUpTime.Value.AddDays(3).Month != DateTime.Now.AddDays(5).Month || package.PickUpTime.Value.AddDays(3).Year != DateTime.Now.AddDays(5).Year)
                     throw new Exception("De ophaaltijd mag niet meer dan 2 dagen in de toekomst liggen!");
                 else if (package.LatestPickUpTime.HasValue)
                 {
