@@ -127,7 +127,7 @@
                     throw new Exception("Je account is niet geldig!");
             }
             else
-                throw new Exception("Deze maaltijd is al gereserveerd door iemand anders!");
+                throw new Exception("Het pakket bestaat niet of is al gereserveerd door iemand anders!");
         }
         //Get all reservations from students
         public async Task<IEnumerable<Package>> GetAllReservationsFromStudentAsync(string studentNumber)
